@@ -1,7 +1,9 @@
 namespace rememberall.src.Entities;
 
-public class Item : BaseEntity
+public class TodoItem : BaseEntity
 {
+    public required Guid ListId {get; init;}
+    public required TodoList List {get; init;}
     public required string Text { get; init; }
     public bool IsCompleted { get; private set; } = false;
     public int CompletionCount { get; private set; } = 0;

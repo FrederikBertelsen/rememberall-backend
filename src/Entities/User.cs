@@ -7,5 +7,7 @@ public class User : BaseEntity
     public required bool IsAdmin { get; init; } = false;
     public ICollection<TodoList> Lists { get; set; } = [];
     public ICollection<ListCollaborator> Collaborations { get; set; } = [];
+    public ICollection<Invite> InvitesSent { get; set; } = [];
+    public ICollection<Invite> InvitesReceived { get; set; } = [];
 
 }
