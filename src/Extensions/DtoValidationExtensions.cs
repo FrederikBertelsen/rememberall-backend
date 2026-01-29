@@ -51,4 +51,23 @@ public static class DtoValidationExtensions
             throw new MissingValueException("TodoList", nameof(todoListDto.Items));
     }
     #endregion
+
+    #region TodoItem Validations
+    public static void ValidateOrThrow(this CreateTodoItemDto createTodoItemDto)
+    {
+        if (createTodoItemDto is null)
+            throw new MissingValueException("TodoItem data");
+        if (createTodoItemDto.TodoListId == Guid.Empty)
+            throw new MissingValueException("TodoItem", nameof(createTodoItemDto.TodoListId));
+        if (string.IsNullOrWhiteSpace(createTodoItemDto.Text))
+            throw new MissingValueException("TodoItem", nameof(createTodoItemDto.Text));
+    }
+    public static void ValidateOrThrow(this TodoItemDto todoItemDto)
+    {
+        if (todoItemDto is null)
+            throw new MissingValueException("TodoItem data");
+        if (string.IsNullOrWhiteSpace(todoItemDto.Text))
+            throw new MissingValueException("TodoItem", nameof(todoItemDto.Text));
+    }
+    #endregion
 }

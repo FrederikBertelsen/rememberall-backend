@@ -25,8 +25,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // TodoList <=> TodoItem
         modelBuilder.Entity<TodoList>()
             .HasMany(list => list.Items)
-            .WithOne(item => item.List)
-            .HasForeignKey(i => i.ListId)
+            .WithOne(item => item.TodoList)
+            .HasForeignKey(i => i.TodoListId)
             .OnDelete(DeleteBehavior.Cascade);
 
 

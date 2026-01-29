@@ -7,6 +7,7 @@ namespace RememberAll.src.Repositories;
 public class TodoItemRepository(AppDbContext dbContext) : ITodoItemRepository
 {
     public async Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem) => (await dbContext.TodoItems.AddAsync(todoItem)).Entity;
+    public async Task<TodoItem?> GetTodoItemByIdAsync(Guid todoItemId) => await dbContext.TodoItems.FindAsync(todoItemId);
     public TodoItem UpdateTodoItem(TodoItem todoItem) => dbContext.TodoItems.Update(todoItem).Entity;
     public void DeleteTodoItem(TodoItem todoItem) => dbContext.TodoItems.Remove(todoItem);
 
