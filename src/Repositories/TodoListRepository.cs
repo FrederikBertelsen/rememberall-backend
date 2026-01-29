@@ -15,6 +15,7 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
         await dbContext.TodoLists.Where(todoList => todoList.OwnerId == userId).ToListAsync();
     public void AddItemToTodoList(TodoList todoList, TodoItem todoItem) => todoList.Items.Add(todoItem);
     public void RemoveItemFromTodoList(TodoList todoList, TodoItem todoItem) => todoList.Items.Remove(todoItem);
+    public TodoList UpdateTodoList(TodoList todoList) => dbContext.TodoLists.Update(todoList).Entity;
 
     public void DeleteTodoList(TodoList todoList) => dbContext.TodoLists.Remove(todoList);
     public async Task SaveChangesAsync() => await dbContext.SaveChangesAsync();
