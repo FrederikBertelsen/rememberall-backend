@@ -2,16 +2,27 @@ using Microsoft.EntityFrameworkCore;
 using RememberAll.src.Data;
 using RememberAll.src.Repositories;
 using RememberAll.src.Repositories.Interfaces;
+using RememberAll.src.Services;
 using RememberAll.src.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
+builder.Services.AddScoped<ITodoListService, TodoListService>();
+
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
+builder.Services.AddScoped<ITodoItemService, TodoItemService>();
+
 builder.Services.AddScoped<IListAccessRepository, ListAccessRepository>();
+builder.Services.AddScoped<IListAccessService, ListAccessService>();
+
 builder.Services.AddScoped<IInviteRepository, InviteRepository>();
+builder.Services.AddScoped<IInviteService, InviteService>();
+
 
 builder.Services.AddControllers();
 
