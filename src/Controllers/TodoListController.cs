@@ -8,28 +8,28 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class TodoListController(ITodoListService todoListService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<TodoListDto>> CreateTodoList(CreateTodoListDto newTodoListDto)
     {
         var createdTodoListDto = await todoListService.CreateTodoListAsync(newTodoListDto);
         return Ok(createdTodoListDto);
     }
 
-    [HttpGet]
+    [HttpGet("bylist")]
     public async Task<ActionResult<TodoListDto>> GetTodoListById(Guid listId)
     {
         var todoListDto = await todoListService.GetTodoListByIdAsync(listId);
         return Ok(todoListDto);
     }
 
-    [HttpGet]
+    [HttpGet("byuser")]
     public async Task<ActionResult<ICollection<TodoListDto>>> GetTodoListsByUserId(Guid userId)
     {
         var todoLists =  await todoListService.GetTodoListsByUserIdAsync(userId);
         return Ok(todoLists);
     }
 
-    [HttpDelete]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteTodoList(Guid listId)
     {
         await todoListService.DeleteTodoList(listId);

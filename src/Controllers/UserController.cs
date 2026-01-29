@@ -8,14 +8,14 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto newUserDto)
     {
         var createdUserDto = await userService.CreateUserAsync(newUserDto);
         return Ok(createdUserDto);
     }
 
-    [HttpGet]
+    [HttpGet("byid")]
     public async Task<ActionResult<UserDto>> GetUserById(Guid userId)
     {
         var userDto = await userService.GetUserByIdAsync(userId);
@@ -23,7 +23,7 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
         
-    [HttpDelete]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         await userService.DeleteUserByIdAsync(userId);

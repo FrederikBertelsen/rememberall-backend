@@ -8,35 +8,35 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class TodoItemController(ITodoItemService todoItemService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<TodoItemDto>> CreateTodoItem(CreateTodoItemDto newTodoItemDto)
     {
         var createdTodoItemDto = await todoItemService.CreateTodoItemAsync(newTodoItemDto);
         return Ok(createdTodoItemDto);
     }
 
-    [HttpPatch]
+    [HttpPatch("update")]
     public async Task<ActionResult<TodoItemDto>> UpdateTodoItem(TodoItemDto todoItemDto)
     {
         var updatedTodoItemDto = await todoItemService.UpdateTodoItem(todoItemDto);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch]
+    [HttpPatch("markcomplete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsComplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsCompleteAsync(itemId);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch]
+    [HttpPatch("markincomplete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsIncomplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsIncompleteAsync(itemId);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpDelete]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteTodoItem(Guid itemId)
     {
         await todoItemService.DeleteTodoItem(itemId);

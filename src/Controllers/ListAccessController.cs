@@ -8,28 +8,28 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class ListAccessController(IListAccessService listAccessService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<ListAccessDto>> CreateListAccess(CreateListAccessDto newListAccessDto)
     {
         var createdListAccessDto = await listAccessService.CreateListAccessAsync(newListAccessDto);
         return Ok(createdListAccessDto);
     }
 
-    [HttpGet]
+    [HttpGet("bylist")]
     public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByListId(Guid listId)
     {
         var listAccesses = await listAccessService.GetListAccesssByListIdAsync(listId);
         return Ok(listAccesses);
     }
 
-    [HttpGet]
+    [HttpGet("byuser")]
     public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByUserId(Guid userId)
     {
         var listAccesses = await listAccessService.GetListAccesssByUserIdAsync(userId);
         return Ok(listAccesses);
     }
 
-    [HttpDelete]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteListAccess(Guid listAccessId)
     {
         await listAccessService.DeleteListAccessAsync(listAccessId);

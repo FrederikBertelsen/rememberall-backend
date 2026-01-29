@@ -8,28 +8,28 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class InviteController(IInviteService inviteService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<ActionResult<InviteDto>> CreateInvite(CreateInviteDto newInviteDto)
     {
         var createdInviteDto = await inviteService.CreateInviteAsync(newInviteDto);
         return Ok(createdInviteDto);
     }
 
-    [HttpGet]
+    [HttpGet("sent")]
     public async Task<ActionResult<ICollection<InviteDto>>> GetSentInvitesByUserId(Guid userId)
     {
         var invites = await inviteService.GetSentInvitesByUserIdAsync(userId);
         return Ok(invites);
     }
 
-    [HttpGet]
+    [HttpGet("received")]
     public async Task<ActionResult<ICollection<InviteDto>>> GetRecievedInvitesByUserId(Guid userId)
     {
         var invites = await inviteService.GetRecievedInvitesByUserIdAsync(userId);
         return Ok(invites);
     }
 
-    [HttpDelete]
+    [HttpDelete("delete")]
     public async Task<IActionResult> DeleteInvite(Guid inviteId)
     {
         await inviteService.DeleteInviteByIdAsync(inviteId);
