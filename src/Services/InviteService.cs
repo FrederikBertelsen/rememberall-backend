@@ -13,7 +13,7 @@ public class InviteService(
     IInviteRepository inviteRepository,
     IListAccessRepository listAccessRepository) : IInviteService
 {
-    public async Task<InviteDto> CreateInvite(CreateInviteDto createInviteDto)
+    public async Task<InviteDto> CreateInviteAsync(CreateInviteDto createInviteDto)
     {
         createInviteDto.ValidateOrThrow();
 
@@ -34,7 +34,7 @@ public class InviteService(
         return createdInvite.ToDto();
     }
 
-    public async Task<ICollection<InviteDto>> GetRecievedInvitesByUserId(Guid userId)
+    public async Task<ICollection<InviteDto>> GetRecievedInvitesByUserIdAsync(Guid userId)
     {
         if (userId == Guid.Empty)
             throw new MissingValueException("UserId");
@@ -47,7 +47,7 @@ public class InviteService(
         return invites.ToDtos();
     }
 
-    public async Task<ICollection<InviteDto>> GetSentInvitesByUserId(Guid userId)
+    public async Task<ICollection<InviteDto>> GetSentInvitesByUserIdAsync(Guid userId)
     {
         if (userId == Guid.Empty)
             throw new MissingValueException("UserId");
@@ -60,7 +60,7 @@ public class InviteService(
         return invites.ToDtos();
     }
 
-    public async Task AcceptInviteById(Guid inviteId)
+    public async Task AcceptInviteByIdAsync(Guid inviteId)
     {
         if (inviteId == Guid.Empty)
             throw new MissingValueException("InviteId");
@@ -76,14 +76,14 @@ public class InviteService(
         await inviteRepository.SaveChangesAsync();
     }
 
-    public async Task DeleteInviteById(Guid inviteId)
+    public async Task DeleteInviteByIdAsync(Guid inviteId)
     {
         if (inviteId == Guid.Empty)
             throw new MissingValueException("InviteId");
-        
+
         Invite invite = await inviteRepository.GetInviteByIdAsync(inviteId)
             ?? throw new NotFoundException("Invite", "Id", inviteId);
-        
+
         inviteRepository.DeleteInvite(invite);
 
         await inviteRepository.SaveChangesAsync();
