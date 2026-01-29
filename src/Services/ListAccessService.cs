@@ -49,7 +49,7 @@ public class ListAccessService(IUserRepository userRepository, ITodoListReposito
         return listAccess.ToDtos();
     }
 
-    public async Task DeleteListAccess(Guid listAccessId)
+    public async Task DeleteListAccessAsync(Guid listAccessId)
     {
         if (listAccessId == Guid.Empty)
             throw new MissingValueException("ListAccess", "Id");
