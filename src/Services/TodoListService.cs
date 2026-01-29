@@ -48,12 +48,13 @@ public class TodoListService(IUserRepository userRepository, ITodoListRepository
         return todoLists.ToDtos();
     }
 
-    public async Task DeleteTodoList(TodoListDto todoListDto)
+    public async Task DeleteTodoList(Guid listId)
     {
-        todoListDto.ValidateOrThrow();
+        if (listId == Guid.Empty)
+            throw new MissingValueException("List Id");
 
-        TodoList? todoList = await todoListRepository.GetTodoListByIdAsync(todoListDto.Id)
-            ?? throw new NotFoundException("List", "Id", todoListDto.Id);
+        TodoList? todoList = await todoListRepository.GetTodoListByIdAsync(listId)
+            ?? throw new NotFoundException("List", "Id", listId);
 
         todoListRepository.DeleteTodoList(todoList);
 
