@@ -4,6 +4,8 @@ using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
 
+[Route("api/todoitems")]
+[ApiController]
 public class TodoItemController(ITodoItemService todoItemService) : ControllerBase
 {
     [HttpPost]
