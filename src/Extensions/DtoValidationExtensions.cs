@@ -28,4 +28,27 @@ public static class DtoValidationExtensions
             throw new MissingValueException("User", nameof(userDto.Email));
     }
     #endregion
+
+    #region TodoList Validations
+    public static void ValidateOrThrow(this CreateTodoListDto createTodoListDto)
+    {
+        if (createTodoListDto is null)
+            throw new MissingValueException("TodoList data");
+        if (createTodoListDto.OwnerId == Guid.Empty)
+            throw new MissingValueException("TodoList", nameof(createTodoListDto.OwnerId));
+        if (string.IsNullOrWhiteSpace(createTodoListDto.Name))
+            throw new MissingValueException("TodoList", nameof(createTodoListDto.Name));
+    }
+    public static void ValidateOrThrow(this TodoListDto todoListDto)
+    {
+        if (todoListDto is null)
+            throw new MissingValueException("TodoList data");
+        if (todoListDto.OwnerId == Guid.Empty)
+            throw new MissingValueException("TodoList", nameof(todoListDto.OwnerId));
+        if (string.IsNullOrWhiteSpace(todoListDto.Name))
+            throw new MissingValueException("TodoList", nameof(todoListDto.Name));
+        if (todoListDto.Items is null)
+            throw new MissingValueException("TodoList", nameof(todoListDto.Items));
+    }
+    #endregion
 }

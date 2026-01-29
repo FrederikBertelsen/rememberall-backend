@@ -12,8 +12,8 @@ public static class EntityDtoMappingExtensions
     {
         return new()
         {
-            Name = createUserDto.Name!,
-            Email = createUserDto.Email!,
+            Name = createUserDto.Name,
+            Email = createUserDto.Email,
         };
     }
 
@@ -35,7 +35,53 @@ public static class EntityDtoMappingExtensions
             Email: user.Email
         );
     }
+    #endregion
 
+    #region TodoList Mappings
+    public static TodoList ToEntity(this CreateTodoListDto createTodoListDto, User owner)
+    {
+        return new()
+        {
+            OwnerId = createTodoListDto.OwnerId,
+            Owner = owner,
+            Name = createTodoListDto.Name,
+        };
+    }
+
+    public static TodoListDto ToDto(this TodoList todoList)
+    {
+        return new(
+            Id: todoList.Id,
+            OwnerId: todoList.OwnerId,
+            Name: todoList.Name,
+            Items: todoList.Items.Select(item => item.ToDto()).ToList()
+        );
+    }
+
+    public static ICollection<TodoListDto> ToDto(this ICollection<TodoList> todoLists) =>
+        todoLists.Select(list => list.ToDto()).ToList();
+    #endregion
+
+    #region TodoItem Mappings
+    public static TodoItem ToEntity(this CreateTodoItemDto createTodoItemDto, TodoList todoList)
+    {
+        return new()
+        {
+            ListId = createTodoItemDto.TodoListId,
+            Text = createTodoItemDto.Text!,
+            List = todoList
+        };
+    }
+
+    public static TodoItemDto ToDto(this TodoItem todoItem)
+    {
+        return new(
+            Id: todoItem.Id,
+            Text: todoItem.Text,
+            IsCompleted: todoItem.IsCompleted,
+            CompletionCount: todoItem.CompletionCount
+        );
+    }
     #endregion
 
     // update Entity field only if DTO field is not null
