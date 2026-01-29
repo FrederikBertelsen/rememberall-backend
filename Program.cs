@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using rememberall.src.Data;
 using rememberall.src.Repositories;
 using rememberall.src.Repositories.Interfaces;
+using rememberall.src.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
-builder.Services.AddScoped<IListCollaboratorRepository, ListCollaboratorRepository>();
+builder.Services.AddScoped<IListAccessRepository, ListAccessRepository>();
 builder.Services.AddScoped<IInviteRepository, InviteRepository>();
 
 builder.Services.AddControllers();

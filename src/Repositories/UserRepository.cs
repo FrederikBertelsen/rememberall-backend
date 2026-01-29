@@ -12,7 +12,7 @@ public class UserRepository(AppDbContext dbContext) : IUserRepository
     public async Task<User?> GetUserByIdAsync(Guid userId) => await dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
     public async Task<User?> GetUserWithRelationsByIdAsync(Guid userId) =>
         await dbContext.Users
-        .Include(user => user.Collaborations)
+        .Include(user => user.ListAccess)
         .Include(user => user.Lists)
         .FirstOrDefaultAsync(user => user.Id == userId);
     public async Task<User?> GetUserByEmailAsync(string email) => await dbContext.Users.FirstOrDefaultAsync(user => user.Email == email);

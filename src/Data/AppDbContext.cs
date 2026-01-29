@@ -7,7 +7,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<User> Users { get; init; }
     public DbSet<TodoList> TodoLists { get; init; }
-    public DbSet<ListCollaborator> ListCollaborators { get; init; }
+    public DbSet<ListAccess> ListAccesss { get; init; }
     public DbSet<TodoItem> TodoItems { get; init; }
     public DbSet<Invite> Invites { get; init; }
 
@@ -55,26 +55,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
 
         // Unique constraints / indexes
-        modelBuilder.Entity<ListCollaborator>()
-            .HasIndex(listCollaborator => new { listCollaborator.ListId, listCollaborator.UserId })
+        modelBuilder.Entity<ListAccess>()
+            .HasIndex(listAccess => new { listAccess.ListId, listAccess.UserId })
             .IsUnique();
 
         modelBuilder.Entity<Invite>()
             .HasIndex(invite => new { invite.InviteRecieverId, invite.ListId })
             .IsUnique();
 
-        // ListCollaborator <=> User
+        // ListAccess <=> User
         modelBuilder.Entity<User>()
-            .HasMany(user => user.Collaborations)
-            .WithOne(listCollaborator => listCollaborator.User)
-            .HasForeignKey(listCollaborator => listCollaborator.UserId)
+            .HasMany(user => user.ListAccess)
+            .WithOne(listAccess => listAccess.User)
+            .HasForeignKey(listAccess => listAccess.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // ListCollaborator => List
+        // ListAccess => List
         modelBuilder.Entity<TodoList>()
-            .HasMany(list => list.Collaborators)
-            .WithOne(listCollaborator => listCollaborator.List)
-            .HasForeignKey(listCollaborator => listCollaborator.ListId)
+            .HasMany(list => list.Accessors)
+            .WithOne(listAccess => listAccess.List)
+            .HasForeignKey(listAccess => listAccess.ListId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

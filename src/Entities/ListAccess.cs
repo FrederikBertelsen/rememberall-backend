@@ -1,6 +1,6 @@
 namespace rememberall.src.Entities;
 
-public class ListCollaborator : BaseEntity
+public class ListAccess : BaseEntity
 {
     public required Guid UserId { get; init; }
     public required User User { get; init; }
