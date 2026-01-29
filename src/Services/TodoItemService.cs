@@ -39,6 +39,42 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
         return todoItem.ToDto();
     }
 
+    public async Task<TodoItemDto> MarkTodoItemAsCompleteAsync(Guid todoItemId)
+    {
+        if (todoItemId == Guid.Empty)
+            throw new MissingValueException("TodoItem Id");
+
+        TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
+            ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
+
+        if (todoItem.IsCompleted)
+            throw new BusinessLogicException("TodoItem is already completed");
+
+        todoItemRepository.MarkTodoItemAsComplete(todoItem);
+
+        await todoItemRepository.SaveChangesAsync();
+
+        return todoItem.ToDto();
+    }
+
+    public async Task<TodoItemDto> MarkTodoItemAsIncompleteAsync(Guid todoItemId)
+    {
+        if (todoItemId == Guid.Empty)
+            throw new MissingValueException("TodoItem Id");
+
+        TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
+            ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
+
+        if (!todoItem.IsCompleted)
+            throw new BusinessLogicException("TodoItem is already incomplete");
+
+        todoItemRepository.MarkTodoItemAsIncomplete(todoItem);
+
+        await todoItemRepository.SaveChangesAsync();
+
+        return todoItem.ToDto();
+    }
+
     public async Task DeleteTodoItem(Guid todoItemId)
     {
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)

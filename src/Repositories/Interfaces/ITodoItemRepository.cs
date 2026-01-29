@@ -7,6 +7,8 @@ public interface ITodoItemRepository
     public Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem);
     public Task<TodoItem?> GetTodoItemByIdAsync(Guid todoItemId);
     public TodoItem UpdateTodoItem(TodoItem todoItem);
+    public TodoItem MarkTodoItemAsComplete(TodoItem todoItem);
+    public TodoItem MarkTodoItemAsIncomplete(TodoItem todoItem);
     public void DeleteTodoItem(TodoItem todoItem);
 
     public Task SaveChangesAsync();

@@ -9,7 +9,7 @@ public class TodoItem : BaseEntity
     public int CompletionCount { get; private set; } = 0;
 
 
-    public void MarkCompleted()
+    public void MarkAsComplete()
     {
         if (IsCompleted)
             throw new InvalidOperationException("Item is already completed");
@@ -18,7 +18,7 @@ public class TodoItem : BaseEntity
         CompletionCount++;
     }
 
-    public void MarkIncomplete()
+    public void MarkAsIncomplete()
     {
         if (!IsCompleted)
             throw new InvalidOperationException("Item is already incomplete");
