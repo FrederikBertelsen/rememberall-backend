@@ -20,8 +20,6 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
                 .Where(todoList => todoList.OwnerId == userId)
                 .ToListAsync();
 
-    public TodoList UpdateTodoList(TodoList todoList) => dbContext.TodoLists.Update(todoList).Entity;
-
     public void DeleteTodoList(TodoList todoList) => dbContext.TodoLists.Remove(todoList);
     public async Task SaveChangesAsync() => await dbContext.SaveChangesAsync();
 }
