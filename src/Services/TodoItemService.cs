@@ -7,7 +7,7 @@ using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Services;
 
-public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRepository todoItemRepository) : ITodoService
+public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRepository todoItemRepository) : ITodoItemService
 {
     public async Task<TodoItemDto> CreateTodoItemAsync(CreateTodoItemDto createTodoItemDto)
     {
