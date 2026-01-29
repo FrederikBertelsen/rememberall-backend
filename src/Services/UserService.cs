@@ -26,10 +26,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         if (userId == Guid.Empty)
             throw new MissingValueException("User Id");
 
-        User? foundUser = await userRepository.GetUserByIdAsync(userId);
-
-        if (foundUser is null)
-            throw new NotFoundException("User", "Id", userId);
+        User? foundUser = await userRepository.GetUserByIdAsync(userId)
+            ?? throw new NotFoundException("User", "Id", userId);
 
         return foundUser.ToDto();
     }
@@ -40,10 +38,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         if (string.IsNullOrWhiteSpace(email))
             throw new MissingValueException("User Email");
 
-        User? foundUser = await userRepository.GetUserByEmailAsync(email);
-
-        if (foundUser is null)
-            throw new NotFoundException("User", "Email", email);
+        User? foundUser = await userRepository.GetUserByEmailAsync(email)
+            ?? throw new NotFoundException("User", "Email", email);
 
         return foundUser.ToDto();
     }
@@ -52,10 +48,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         if (userId == Guid.Empty)
             throw new MissingValueException("User Id");
 
-        User? foundUser = await userRepository.GetUserWithRelationsByIdAsync(userId);
-
-        if (foundUser is null)
-            throw new NotFoundException("User", "Id", userId);
+        User? foundUser = await userRepository.GetUserWithRelationsByIdAsync(userId)
+            ?? throw new NotFoundException("User", "Id", userId);
 
         return foundUser.ToDto();
     }
@@ -81,10 +75,8 @@ public class UserService(IUserRepository userRepository) : IUserService
         if (userId == Guid.Empty)
             throw new MissingValueException("User Id");
 
-        User? userToDelete = await userRepository.GetUserByIdAsync(userId);
-
-        if (userToDelete is null)
-            throw new NotFoundException("User", "Id", userId);
+        User? userToDelete = await userRepository.GetUserByIdAsync(userId)
+            ?? throw new NotFoundException("User", "Id", userId);
 
         userRepository.DeleteUser(userToDelete);
 
