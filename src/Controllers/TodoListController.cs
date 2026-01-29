@@ -19,7 +19,14 @@ public class TodoListController(ITodoListService todoListService) : ControllerBa
         var todoListDto = await todoListService.GetTodoListByIdAsync(listId);
         return Ok(todoListDto);
     }
-    
+
+    [HttpGet]
+    public async Task<ActionResult<ICollection<TodoListDto>>> GetTodoListsByUserId(Guid userId)
+    {
+        var todoLists =  await todoListService.GetTodoListsByUserIdAsync(userId);
+        return Ok(todoLists);
+    }
+
     [HttpDelete]
     public async Task<IActionResult> DeleteTodoList(Guid listId)
     {
