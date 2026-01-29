@@ -1,10 +1,10 @@
-namespace rememberall.src.Entities;
+namespace RememberAll.src.Entities;
 
 public class User : BaseEntity
 {
     public required string Name { get; init; }
     public required string Email { get; init; }
-    public required bool IsAdmin { get; init; } = false;
+    public bool IsAdmin { get; init; } = false;
     public ICollection<TodoList> Lists { get; set; } = [];
     public ICollection<ListAccess> ListAccess { get; set; } = [];
     public ICollection<Invite> InvitesSent { get; set; } = [];

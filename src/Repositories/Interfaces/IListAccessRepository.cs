@@ -1,6 +1,6 @@
-using rememberall.src.Entities;
+using RememberAll.src.Entities;
 
-namespace rememberall.src.Repositories.Interfaces;
+namespace RememberAll.src.Repositories.Interfaces;
 
 public interface IListAccessRepository
 {

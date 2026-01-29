@@ -1,4 +1,4 @@
-namespace rememberall.src.Entities;
+namespace RememberAll.src.Entities;
 
 public class TodoList : BaseEntity
 {

@@ -1,8 +1,8 @@
-using rememberall.src.Data;
-using rememberall.src.Entities;
-using rememberall.src.Repositories.Interfaces;
+using RememberAll.src.Data;
+using RememberAll.src.Entities;
+using RememberAll.src.Repositories.Interfaces;
 
-namespace rememberall.src.Repositories;
+namespace RememberAll.src.Repositories;
 
 public class TodoItemRepository(AppDbContext dbContext) : ITodoItemRepository
 {

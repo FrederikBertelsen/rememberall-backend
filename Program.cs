@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using rememberall.src.Data;
-using rememberall.src.Repositories;
-using rememberall.src.Repositories.Interfaces;
-using rememberall.src.Services.Interfaces;
+using RememberAll.src.Data;
+using RememberAll.src.Repositories;
+using RememberAll.src.Repositories.Interfaces;
+using RememberAll.src.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
