@@ -34,16 +34,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Inviter
         modelBuilder.Entity<Invite>()
-            .HasOne(invite => invite.Inviter)
+            .HasOne(invite => invite.InviterSender)
             .WithMany(user => user.InvitesSent)
-            .HasForeignKey(invite => invite.InviterId)
+            .HasForeignKey(invite => invite.InviteSenderId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Invitee
         modelBuilder.Entity<Invite>()
-            .HasOne(invite => invite.Invitee)
+            .HasOne(invite => invite.InviteReciever)
             .WithMany(user => user.InvitesReceived)
-            .HasForeignKey(invite => invite.InviteeId)
+            .HasForeignKey(invite => invite.InviteRecieverId)
             .OnDelete(DeleteBehavior.Restrict);
 
 
@@ -60,7 +60,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsUnique();
 
         modelBuilder.Entity<Invite>()
-            .HasIndex(invite => new { invite.InviteeId, invite.ListId })
+            .HasIndex(invite => new { invite.InviteRecieverId, invite.ListId })
             .IsUnique();
 
         // ListCollaborator <=> User
