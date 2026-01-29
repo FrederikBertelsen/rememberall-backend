@@ -9,13 +9,24 @@ public class ListAccessRepository(AppDbContext dbContext) : IListAccessRepositor
 {
     public async Task<ListAccess> CreateListAccessAsync(ListAccess listAccess) =>
         (await dbContext.ListAccesss.AddAsync(listAccess)).Entity;
+    
+    public async Task<ListAccess?> GetListAccessByIdAsync(Guid listAccessId) =>
+        await dbContext.ListAccesss
+                .Include(listAccess => listAccess.List)
+                .Include(listAccess => listAccess.User)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(listAccesss => listAccesss.Id == listAccessId);
     public async Task<ICollection<ListAccess>> GetListAccesssByUserIdAsync(Guid userId) =>
         await dbContext.ListAccesss
+                .Include(listAccess => listAccess.List)
+                .Include(listAccess => listAccess.User)
                 .AsNoTracking()
                 .Where(listAccesss => listAccesss.UserId == userId)
                 .ToListAsync();
-    public async Task<ICollection<ListAccess>> GetListAccesssByListIdAsync(Guid listId) =>
+    public async Task<ICollection<ListAccess>> GetListAccessByListIdAsync(Guid listId) =>
         await dbContext.ListAccesss
+                .Include(listAccess => listAccess.List)
+                .Include(listAccess => listAccess.User)
                 .AsNoTracking()
                 .Where(listAccesss => listAccesss.ListId == listId)
                 .ToListAsync();

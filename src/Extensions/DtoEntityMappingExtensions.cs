@@ -58,7 +58,7 @@ public static class EntityDtoMappingExtensions
         );
     }
 
-    public static ICollection<TodoListDto> ToDto(this ICollection<TodoList> todoLists) =>
+    public static ICollection<TodoListDto> ToDtos(this ICollection<TodoList> todoLists) =>
         todoLists.Select(list => list.ToDto()).ToList();
     #endregion
 
@@ -91,6 +91,45 @@ public static class EntityDtoMappingExtensions
             CompletionCount: todoItem.CompletionCount
         );
     }
+    #endregion
+
+    #region ListAccess Mappings
+    public static ListAccess ToEntity(this CreateListAccessDto createListAccessDto, User user, TodoList list)
+    {
+        return new()
+        {
+            UserId = createListAccessDto.UserId,
+            User = user,
+            ListId = createListAccessDto.ListId,
+            List = list
+        };
+    }
+
+    public static ListAccess ToEntity(this ListAccessDto listAccessDto, User user, TodoList list)
+    {
+        return new()
+        {
+            Id = listAccessDto.Id,
+            UserId = listAccessDto.UserId,
+            User = user,
+            ListId = listAccessDto.ListId,
+            List = list
+        };
+    }
+
+    public static ListAccessDto ToDto(this ListAccess listAccess)
+    {
+        return new(
+            Id: listAccess.Id,
+            UserId: listAccess.UserId,
+            UserName: listAccess.User.Name,
+            ListId: listAccess.ListId,
+            ListName: listAccess.List.Name
+        );
+    }
+
+    public static ICollection<ListAccessDto> ToDtos(this ICollection<ListAccess> listAccesss) =>
+        listAccesss.Select(la => la.ToDto()).ToList();
     #endregion
 
     // update Entity field only if DTO field is not null

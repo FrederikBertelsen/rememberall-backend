@@ -70,4 +70,32 @@ public static class DtoValidationExtensions
             throw new MissingValueException("TodoItem", nameof(todoItemDto.Text));
     }
     #endregion
+
+    #region ListAccess Validations
+    public static void ValidateOrThrow(this CreateListAccessDto createListAccessDto)
+    {
+        if (createListAccessDto is null)
+            throw new MissingValueException("ListAccess data");
+        if (createListAccessDto.UserId == Guid.Empty)
+            throw new MissingValueException("ListAccess", nameof(createListAccessDto.UserId));
+        if (createListAccessDto.ListId == Guid.Empty)
+            throw new MissingValueException("ListAccess", nameof(createListAccessDto.ListId));
+    }
+
+    public static void ValidateOrThrow(this ListAccessDto listAccessDto)
+    {
+        if (listAccessDto is null)
+            throw new MissingValueException("ListAccess data");
+        if (listAccessDto.Id == Guid.Empty)
+            throw new MissingValueException("ListAccess", nameof(listAccessDto.Id));
+        if (listAccessDto.UserId == Guid.Empty)
+            throw new MissingValueException("ListAccess", nameof(listAccessDto.UserId));
+        if (string.IsNullOrWhiteSpace(listAccessDto.UserName))
+            throw new MissingValueException("ListAccess", nameof(listAccessDto.UserName));
+        if (listAccessDto.ListId == Guid.Empty)
+            throw new MissingValueException("ListAccess", nameof(listAccessDto.ListId));
+        if (string.IsNullOrWhiteSpace(listAccessDto.ListName))
+            throw new MissingValueException("ListAccess", nameof(listAccessDto.ListName));
+    }
+    #endregion
 }
