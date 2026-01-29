@@ -34,7 +34,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Inviter
         modelBuilder.Entity<Invite>()
-            .HasOne(invite => invite.InviterSender)
+            .HasOne(invite => invite.InviteSender)
             .WithMany(user => user.InvitesSent)
             .HasForeignKey(invite => invite.InviteSenderId)
             .OnDelete(DeleteBehavior.Restrict);

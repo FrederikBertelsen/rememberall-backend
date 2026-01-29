@@ -98,4 +98,18 @@ public static class DtoValidationExtensions
             throw new MissingValueException("ListAccess", nameof(listAccessDto.ListName));
     }
     #endregion
+
+    #region Invite Validations
+    public static void ValidateOrThrow(this CreateInviteDto createInviteDto)
+    {
+        if (createInviteDto is null)
+            throw new MissingValueException("Invite data");
+        if (createInviteDto.InviteSenderId == Guid.Empty)
+            throw new MissingValueException("Invite", nameof(createInviteDto.InviteSenderId));
+        if (createInviteDto.InviteRecieverId == Guid.Empty)
+            throw new MissingValueException("Invite", nameof(createInviteDto.InviteRecieverId));
+        if (createInviteDto.ListId == Guid.Empty)
+            throw new MissingValueException("Invite", nameof(createInviteDto.ListId));
+    }
+    #endregion
 }
