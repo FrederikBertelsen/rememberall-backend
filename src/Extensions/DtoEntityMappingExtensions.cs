@@ -137,7 +137,7 @@ public static class EntityDtoMappingExtensions
     {
         return new()
         {
-            InviteSenderId = createInviteDto.InviteSenderId,
+            InviteSenderId = inviteSender.Id,
             InviteSender = inviteSender,
             InviteRecieverId = createInviteDto.InviteRecieverId,
             InviteReciever = inviteReciever,

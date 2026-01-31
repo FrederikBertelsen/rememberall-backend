@@ -1,13 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
 
+[Authorize]
 [Route("api/invites")]
 [ApiController]
 public class InviteController(IInviteService inviteService) : ControllerBase
 {
+
     [HttpPost("create")]
     public async Task<ActionResult<InviteDto>> CreateInvite(CreateInviteDto newInviteDto)
     {
@@ -16,16 +19,16 @@ public class InviteController(IInviteService inviteService) : ControllerBase
     }
 
     [HttpGet("sent")]
-    public async Task<ActionResult<ICollection<InviteDto>>> GetSentInvitesByUserId(Guid userId)
+    public async Task<ActionResult<ICollection<InviteDto>>> GetSentInvitesByUserId()
     {
-        var invites = await inviteService.GetSentInvitesByUserIdAsync(userId);
+        var invites = await inviteService.GetSentInvitesByUserIdAsync();
         return Ok(invites);
     }
 
     [HttpGet("received")]
-    public async Task<ActionResult<ICollection<InviteDto>>> GetRecievedInvitesByUserId(Guid userId)
+    public async Task<ActionResult<ICollection<InviteDto>>> GetRecievedInvitesByUserId()
     {
-        var invites = await inviteService.GetRecievedInvitesByUserIdAsync(userId);
+        var invites = await inviteService.GetRecievedInvitesByUserIdAsync();
         return Ok(invites);
     }
 

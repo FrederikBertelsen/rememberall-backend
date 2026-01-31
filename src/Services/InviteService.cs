@@ -11,14 +11,16 @@ public class InviteService(
     IUserRepository userRepository,
     ITodoListRepository todoListRepository,
     IInviteRepository inviteRepository,
-    IListAccessRepository listAccessRepository) : IInviteService
+    IListAccessRepository listAccessRepository,
+    ICurrentUserService currentUserService) : IInviteService
 {
     public async Task<InviteDto> CreateInviteAsync(CreateInviteDto createInviteDto)
     {
         createInviteDto.ValidateOrThrow();
 
-        User inviteSender = await userRepository.GetUserByIdAsync(createInviteDto.InviteSenderId)
-            ?? throw new NotFoundException("User", "Id", createInviteDto.InviteSenderId);
+        var currentUserId = currentUserService.GetUserId();
+        User inviteSender = await userRepository.GetUserByIdAsync(currentUserId)
+            ?? throw new NotFoundException("User", "Id", currentUserId);
 
         User inviteReciever = await userRepository.GetUserByIdAsync(createInviteDto.InviteRecieverId)
             ?? throw new NotFoundException("User", "Id", createInviteDto.InviteRecieverId);
@@ -34,10 +36,9 @@ public class InviteService(
         return createdInvite.ToDto();
     }
 
-    public async Task<ICollection<InviteDto>> GetRecievedInvitesByUserIdAsync(Guid userId)
+    public async Task<ICollection<InviteDto>> GetRecievedInvitesByUserIdAsync()
     {
-        if (userId == Guid.Empty)
-            throw new MissingValueException("UserId");
+        var userId = currentUserService.GetUserId();
 
         if (!await userRepository.UserExistsByIdAsync(userId))
             throw new NotFoundException("User", "Id", userId);
@@ -47,10 +48,9 @@ public class InviteService(
         return invites.ToDtos();
     }
 
-    public async Task<ICollection<InviteDto>> GetSentInvitesByUserIdAsync(Guid userId)
+    public async Task<ICollection<InviteDto>> GetSentInvitesByUserIdAsync()
     {
-        if (userId == Guid.Empty)
-            throw new MissingValueException("UserId");
+        var userId = currentUserService.GetUserId();
 
         if (!await userRepository.UserExistsByIdAsync(userId))
             throw new NotFoundException("User", "Id", userId);

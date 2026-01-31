@@ -112,8 +112,6 @@ public static class DtoValidationExtensions
     {
         if (createInviteDto is null)
             throw new MissingValueException("Invite data");
-        if (createInviteDto.InviteSenderId == Guid.Empty)
-            throw new MissingValueException("Invite", nameof(createInviteDto.InviteSenderId));
         if (createInviteDto.InviteRecieverId == Guid.Empty)
             throw new MissingValueException("Invite", nameof(createInviteDto.InviteRecieverId));
         if (createInviteDto.ListId == Guid.Empty)
