@@ -9,18 +9,6 @@ namespace RememberAll.src.Services;
 
 public class UserService(IUserRepository userRepository) : IUserService
 {
-    public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
-    {
-        createUserDto.ValidateOrThrow();
-
-        User newUser = createUserDto.ToEntity();
-        UserDto newUserDto = (await userRepository.CreateUserAsync(newUser)).ToDto();
-
-        await userRepository.SaveChangesAsync();
-
-        return newUserDto;
-    }
-
     public async Task<UserDto> GetUserByIdAsync(Guid userId)
     {
         if (userId == Guid.Empty)

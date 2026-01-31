@@ -4,7 +4,6 @@ namespace RememberAll.src.Services.Interfaces;
 
 public interface IUserService
 {
-    public Task<UserDto> CreateUserAsync(CreateUserDto createUserDto);
     Task<UserDto> GetUserByIdAsync(Guid userId);
     public Task<UserDto> GetUserWithRelationsByIdAsync(Guid userId);
     public Task<UserDto> GetUserByEmailAsync(string email);
