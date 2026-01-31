@@ -19,11 +19,11 @@ public class InviteService(
         createInviteDto.ValidateOrThrow();
 
         var currentUserId = currentUserService.GetUserId();
-        User inviteSender = await userRepository.GetUserByIdAsync(currentUserId)
-            ?? throw new NotFoundException("User", "Id", currentUserId);
+        if (!await userRepository.UserExistsByIdAsync(currentUserId))
+            throw new NotFoundException("User", "Id", currentUserId);
 
-        User inviteReciever = await userRepository.GetUserByIdAsync(createInviteDto.InviteRecieverId)
-            ?? throw new NotFoundException("User", "Id", createInviteDto.InviteRecieverId);
+        if (!await userRepository.UserExistsByIdAsync(createInviteDto.InviteRecieverId))
+            throw new NotFoundException("User", "Id", createInviteDto.InviteRecieverId);
 
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createInviteDto.ListId)
             ?? throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
@@ -31,7 +31,7 @@ public class InviteService(
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, todoList.Id))
             throw new AuthException("User does not have access to the specified TodoList.");
 
-        Invite newInvite = createInviteDto.ToEntity(inviteSender, inviteReciever, todoList);
+        Invite newInvite = createInviteDto.ToEntity(currentUserId);
         Invite createdInvite = await inviteRepository.CreateInviteAsync(newInvite);
 
         await inviteRepository.SaveChangesAsync();
@@ -71,7 +71,7 @@ public class InviteService(
         Invite invite = await inviteRepository.GetInviteByIdAsync(inviteId)
             ?? throw new NotFoundException("Invite", "Id", inviteId);
 
-        if (invite.List.OwnerId != invite.InviteSenderId)
+        if (invite.List!.OwnerId != invite.InviteSenderId)
             throw new InvalidOperationException("Invite's sender is not the owner of the list.");
 
         if (!currentUserService.IsCurrentUser(invite.InviteRecieverId))

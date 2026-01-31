@@ -43,7 +43,6 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             OwnerId = owner.Id,
-            Owner = owner,
             Name = createTodoListDto.Name,
         };
     }
@@ -68,7 +67,6 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             TodoListId = todoList.Id,
-            TodoList = todoList,
             Text = createTodoItemDto.Text
         };
     }
@@ -77,8 +75,7 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             TodoListId = createTodoItemDto.TodoListId,
-            Text = createTodoItemDto.Text,
-            TodoList = todoList
+            Text = createTodoItemDto.Text
         };
     }
 
@@ -99,9 +96,7 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             UserId = createListAccessDto.UserId,
-            User = user,
             ListId = createListAccessDto.ListId,
-            List = list
         };
     }
 
@@ -111,9 +106,7 @@ public static class EntityDtoMappingExtensions
         {
             Id = listAccessDto.Id,
             UserId = listAccessDto.UserId,
-            User = user,
             ListId = listAccessDto.ListId,
-            List = list
         };
     }
 
@@ -122,9 +115,9 @@ public static class EntityDtoMappingExtensions
         return new(
             Id: listAccess.Id,
             UserId: listAccess.UserId,
-            UserName: listAccess.User.Name,
+            UserName: listAccess.User!.Name,
             ListId: listAccess.ListId,
-            ListName: listAccess.List.Name
+            ListName: listAccess.List!.Name
         );
     }
 
@@ -133,16 +126,13 @@ public static class EntityDtoMappingExtensions
     #endregion
 
     #region Invite Mappings
-    public static Invite ToEntity(this CreateInviteDto createInviteDto, User inviteSender, User inviteReciever, TodoList list)
+    public static Invite ToEntity(this CreateInviteDto createInviteDto, Guid inviteSenderId)
     {
         return new()
         {
-            InviteSenderId = inviteSender.Id,
-            InviteSender = inviteSender,
+            InviteSenderId = inviteSenderId,
             InviteRecieverId = createInviteDto.InviteRecieverId,
-            InviteReciever = inviteReciever,
             ListId = createInviteDto.ListId,
-            List = list
         };
     }
 
@@ -151,11 +141,11 @@ public static class EntityDtoMappingExtensions
         return new(
             Id: invite.Id,
             InviteSenderId: invite.InviteSenderId,
-            InviteSenderName: invite.InviteSender.Name,
+            InviteSenderName: invite.InviteSender!.Name,
             InviteRecieverId: invite.InviteRecieverId,
-            InviteRecieverName: invite.InviteReciever.Name,
+            InviteRecieverName: invite.InviteReciever!.Name,
             ListId: invite.ListId,
-            ListName: invite.List.Name
+            ListName: invite.List!.Name
         );
     }
 
@@ -164,9 +154,7 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             UserId = invite.InviteRecieverId,
-            User = invite.InviteReciever,
             ListId = invite.ListId,
-            List = invite.List
         };
     }
 

@@ -22,9 +22,10 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
             .ToListAsync();
 
         var sharedLists = await dbContext.ListAccess
+            .Include(listAccess => listAccess.List)
             .AsNoTracking()
             .Where(access => access.UserId == userId)
-            .Select(access => access.List)
+            .Select(access => access.List!)
             .Distinct()
             .ToListAsync();
 

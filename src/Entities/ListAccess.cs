@@ -3,8 +3,8 @@ namespace RememberAll.src.Entities;
 public class ListAccess : BaseEntity
 {
     public required Guid UserId { get; init; }
-    public required User User { get; init; }
+    public User? User { get; set; }
     public required Guid ListId { get; init; }
-    public required TodoList List { get; init; }
+    public TodoList? List { get; set; }
 
 }

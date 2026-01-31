@@ -61,19 +61,18 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
 
-    // Host the Swagger UI at the application's root ("/")
+    // // Host the Swagger UI at the application's root ("/")
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
         options.RoutePrefix = string.Empty;
     });
 }

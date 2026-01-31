@@ -47,7 +47,7 @@ public class ListAccessService(
 
         var userId = currentUserService.GetUserId();
 
-        if (listAccess.List.OwnerId != userId && listAccess.UserId != userId)
+        if (listAccess.List!.OwnerId != userId && listAccess.UserId != userId)
             throw new AuthException("User is neither the owner of the todo list nor the user of the list access.");
 
         listAccessRepository.DeleteListAccess(listAccess);

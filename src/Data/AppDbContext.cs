@@ -70,7 +70,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(listAccess => listAccess.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // ListAccess => List
+        // List <=> ListAccess
         modelBuilder.Entity<TodoList>()
             .HasMany(list => list.Accessors)
             .WithOne(listAccess => listAccess.List)
