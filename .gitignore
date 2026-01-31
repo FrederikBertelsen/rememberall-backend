@@ -457,3 +457,5 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,csharp,dotnetcore,macos
 todo.md
 app.db
+app.db-shm
+app.db-wal
