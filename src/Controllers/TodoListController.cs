@@ -17,6 +17,7 @@ public class TodoListController(ITodoListService todoListService) : ControllerBa
         return Ok(createdTodoListDto);
     }
 
+    [HttpGet("by-id")]
     public async Task<ActionResult<TodoListDto>> GetTodoListById(Guid listId)
     {
         var todoListDto = await todoListService.GetTodoListByIdAsync(listId);
