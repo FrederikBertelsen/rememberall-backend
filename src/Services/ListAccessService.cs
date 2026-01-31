@@ -7,30 +7,15 @@ using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Services;
 
-public class ListAccessService(IUserRepository userRepository, ITodoListRepository todoListRepository, IListAccessRepository listAccessRepository) : IListAccessService
+public class ListAccessService(
+    IListAccessRepository listAccessRepository,
+    ICurrentUserService currentUserService
+    ) : IListAccessService
 {
-    public async Task<ListAccessDto> CreateListAccessAsync(CreateListAccessDto createListAccessDto)
+
+    public async Task<ICollection<ListAccessDto>> GetListAccesssByUserAsync()
     {
-        createListAccessDto.ValidateOrThrow();
-
-        User user = await userRepository.GetUserByIdAsync(createListAccessDto.UserId)
-            ?? throw new NotFoundException("User", "Id", createListAccessDto.UserId);
-
-        TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createListAccessDto.ListId)
-            ?? throw new NotFoundException("TodoList", "Id", createListAccessDto.ListId);
-
-        ListAccess newListAccess = createListAccessDto.ToEntity(user, todoList);
-        ListAccess createdListAccess = await listAccessRepository.CreateListAccessAsync(newListAccess);
-
-        await listAccessRepository.SaveChangesAsync();
-
-        return createdListAccess.ToDto();
-    }
-
-    public async Task<ICollection<ListAccessDto>> GetListAccesssByUserIdAsync(Guid userId)
-    {
-        if (userId == Guid.Empty)
-            throw new MissingValueException("ListAccess", "UserId");
+        Guid userId = currentUserService.GetUserId();
 
         ICollection<ListAccess> listAccess = await listAccessRepository.GetListAccesssByUserIdAsync(userId)
             ?? throw new NotFoundException("ListAccess", "UserId", userId);
@@ -46,6 +31,9 @@ public class ListAccessService(IUserRepository userRepository, ITodoListReposito
         ICollection<ListAccess> listAccess = await listAccessRepository.GetListAccessByListIdAsync(listId)
             ?? throw new NotFoundException("ListAccess", "ListId", listId);
 
+        if (!listAccess.Any(listAccess => !currentUserService.IsCurrentUser(listAccess.UserId)))
+            throw new AuthException("User Doesn't have access to todo list.");
+
         return listAccess.ToDtos();
     }
 
@@ -56,6 +44,11 @@ public class ListAccessService(IUserRepository userRepository, ITodoListReposito
 
         ListAccess listAccess = await listAccessRepository.GetListAccessByIdAsync(listAccessId)
             ?? throw new NotFoundException("ListAccess", "Id", listAccessId);
+
+        var userId = currentUserService.GetUserId();
+
+        if (listAccess.List.OwnerId != userId && listAccess.UserId != userId)
+            throw new AuthException("User is neither the owner of the todo list nor the user of the list access.");
 
         listAccessRepository.DeleteListAccess(listAccess);
 

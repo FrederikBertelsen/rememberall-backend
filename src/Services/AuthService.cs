@@ -37,11 +37,11 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher<User> p
     public async Task<UserDto> Login(LoginDto loginDto)
     {
         User user = await userRepository.GetUserByEmailAsync(loginDto.Email)
-            ?? throw new AuthException("Invalid credentials", new NotFoundException("User", "Email", loginDto.Email).Message);
+            ?? throw new AuthException(new NotFoundException("User", "Email", loginDto.Email).Message);
 
         var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginDto.Password);
         if (verificationResult == PasswordVerificationResult.Failed)
-            throw new AuthException("Invalid credentials", "Password verification failed");
+            throw new AuthException("Password verification failed");
 
         List<Claim> claims =
         [
@@ -73,10 +73,10 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher<User> p
     {
         var idClaim = GetClaimsPrincipal().FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(idClaim, out var userId))
-            throw new AuthException("Authentication failed", "Invalid user ID claim");
+            throw new AuthException("Invalid user ID claim");
 
         var user = await userRepository.GetUserByIdAsync(userId)
-            ?? throw new AuthException("Authentication failed", new NotFoundException("User", "Id", userId.ToString()).Message);
+            ?? throw new AuthException(new NotFoundException("User", "Id", userId.ToString()).Message);
 
         return user.ToDto();
     }
@@ -86,7 +86,7 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher<User> p
     private HttpContext GetHttpContext()
     {
         var httpContext = httpContextAccessor.HttpContext
-            ?? throw new AuthException("Authentication failed", "No HttpContext available");
+            ?? throw new AuthException("No HttpContext available");
 
         return httpContext;
     }
@@ -96,7 +96,7 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher<User> p
         var claimsPrincipal = GetHttpContext().User;
 
         if (claimsPrincipal.Identity is null || !claimsPrincipal.Identity.IsAuthenticated)
-            throw new AuthException("Authentication failed", "User is not authenticated");
+            throw new AuthException("User is not authenticated");
 
         return claimsPrincipal;
     }

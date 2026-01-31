@@ -7,7 +7,11 @@ using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Services;
 
-public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRepository todoItemRepository) : ITodoItemService
+public class TodoItemService(
+    ITodoListRepository todoListRepository,
+    ITodoItemRepository todoItemRepository,
+    IListAccessRepository listAccessRepository,
+    ICurrentUserService currentUserService) : ITodoItemService
 {
     public async Task<TodoItemDto> CreateTodoItemAsync(CreateTodoItemDto createTodoItemDto)
     {
@@ -15,6 +19,9 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
 
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createTodoItemDto.TodoListId)
             ?? throw new NotFoundException("List", "Id", createTodoItemDto.TodoListId);
+
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoList.Id))
+            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
 
         TodoItem newTodoItem = createTodoItemDto.ToEntity(todoList);
         TodoItemDto todoItemDto = (await todoItemRepository.CreateTodoItemAsync(newTodoItem)).ToDto();
@@ -31,6 +38,9 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemDto.Id)
             ?? throw new NotFoundException("Todo Item", "Id", todoItemDto.Id);
 
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
+            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+
         todoItem.ApplyNonNullValuesFromDto(todoItemDto);
         todoItemRepository.UpdateTodoItem(todoItem);
 
@@ -46,6 +56,9 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
 
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
+
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
+            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
 
         if (todoItem.IsCompleted)
             throw new BusinessLogicException("TodoItem is already completed");
@@ -65,6 +78,9 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
 
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
+            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+
         if (!todoItem.IsCompleted)
             throw new BusinessLogicException("TodoItem is already incomplete");
 
@@ -79,6 +95,9 @@ public class TodoItemService(ITodoListRepository todoListRepository, ITodoItemRe
     {
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
+
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
+            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
 
         todoItemRepository.DeleteTodoItem(todoItem);
 

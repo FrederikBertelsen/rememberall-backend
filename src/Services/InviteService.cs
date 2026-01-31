@@ -27,6 +27,9 @@ public class InviteService(
 
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createInviteDto.ListId)
             ?? throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
+        
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, todoList.Id))
+            throw new AuthException("User does not have access to the specified TodoList.");
 
         Invite newInvite = createInviteDto.ToEntity(inviteSender, inviteReciever, todoList);
         Invite createdInvite = await inviteRepository.CreateInviteAsync(newInvite);
@@ -36,7 +39,7 @@ public class InviteService(
         return createdInvite.ToDto();
     }
 
-    public async Task<ICollection<InviteDto>> GetRecievedInvitesByUserIdAsync()
+    public async Task<ICollection<InviteDto>> GetReceivedInvitesByUserAsync()
     {
         var userId = currentUserService.GetUserId();
 
@@ -48,7 +51,7 @@ public class InviteService(
         return invites.ToDtos();
     }
 
-    public async Task<ICollection<InviteDto>> GetSentInvitesByUserIdAsync()
+    public async Task<ICollection<InviteDto>> GetSentInvitesByUserAsync()
     {
         var userId = currentUserService.GetUserId();
 
@@ -68,6 +71,12 @@ public class InviteService(
         Invite invite = await inviteRepository.GetInviteByIdAsync(inviteId)
             ?? throw new NotFoundException("Invite", "Id", inviteId);
 
+        if (invite.List.OwnerId != invite.InviteSenderId)
+            throw new InvalidOperationException("Invite's sender is not the owner of the list.");
+
+        if (!currentUserService.IsCurrentUser(invite.InviteRecieverId))
+            throw new AuthException("User cannot accept an invite not addressed to them.");
+
         ListAccess newListAccess = invite.ToListAccess();
         await listAccessRepository.CreateListAccessAsync(newListAccess);
 
@@ -83,6 +92,10 @@ public class InviteService(
 
         Invite invite = await inviteRepository.GetInviteByIdAsync(inviteId)
             ?? throw new NotFoundException("Invite", "Id", inviteId);
+        
+        if (!currentUserService.IsCurrentUser(invite.InviteSenderId) &&
+            !currentUserService.IsCurrentUser(invite.InviteRecieverId))
+            throw new AuthException("User cannot delete an invite not addressed to or sent by them.");
 
         inviteRepository.DeleteInvite(invite);
 

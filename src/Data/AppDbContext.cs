@@ -7,7 +7,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<User> Users { get; init; }
     public DbSet<TodoList> TodoLists { get; init; }
-    public DbSet<ListAccess> ListAccesss { get; init; }
+    public DbSet<ListAccess> ListAccess { get; init; }
     public DbSet<TodoItem> TodoItems { get; init; }
     public DbSet<Invite> Invites { get; init; }
 

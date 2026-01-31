@@ -12,24 +12,31 @@ public class InviteController(IInviteService inviteService) : ControllerBase
 {
 
     [HttpPost("create")]
-    public async Task<ActionResult<InviteDto>> CreateInvite(CreateInviteDto newInviteDto)
+    public async Task<ActionResult<InviteDto>> CreateInvite(CreateInviteDto createInviteDto)
     {
-        var createdInviteDto = await inviteService.CreateInviteAsync(newInviteDto);
+        var createdInviteDto = await inviteService.CreateInviteAsync(createInviteDto);
         return Ok(createdInviteDto);
     }
 
     [HttpGet("sent")]
-    public async Task<ActionResult<ICollection<InviteDto>>> GetSentInvitesByUserId()
+    public async Task<ActionResult<ICollection<InviteDto>>> GetSentInvitesByUser()
     {
-        var invites = await inviteService.GetSentInvitesByUserIdAsync();
+        var invites = await inviteService.GetSentInvitesByUserAsync();
         return Ok(invites);
     }
 
     [HttpGet("received")]
-    public async Task<ActionResult<ICollection<InviteDto>>> GetRecievedInvitesByUserId()
+    public async Task<ActionResult<ICollection<InviteDto>>> GetReceivedInvitesByUser()
     {
-        var invites = await inviteService.GetRecievedInvitesByUserIdAsync();
+        var invites = await inviteService.GetReceivedInvitesByUserAsync();
         return Ok(invites);
+    }
+
+    [HttpPost("accept")]
+    public async Task<IActionResult> AcceptInvite(Guid inviteId)
+    {
+        await inviteService.AcceptInviteByIdAsync(inviteId);
+        return NoContent();
     }
 
     [HttpDelete("delete")]

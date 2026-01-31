@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
 
-[Route("api/todolists")]
+[Authorize]
+[Route("api/lists")]
 [ApiController]
 public class TodoListController(ITodoListService todoListService) : ControllerBase
 {
@@ -15,17 +17,16 @@ public class TodoListController(ITodoListService todoListService) : ControllerBa
         return Ok(createdTodoListDto);
     }
 
-    [HttpGet("bylist")]
     public async Task<ActionResult<TodoListDto>> GetTodoListById(Guid listId)
     {
         var todoListDto = await todoListService.GetTodoListByIdAsync(listId);
         return Ok(todoListDto);
     }
 
-    [HttpGet("byuser")]
-    public async Task<ActionResult<ICollection<TodoListDto>>> GetTodoListsByUserId(Guid userId)
+    [HttpGet("by-user")]
+    public async Task<ActionResult<ICollection<TodoListDto>>> GetTodoListsByUserId()
     {
-        var todoLists =  await todoListService.GetTodoListsByUserIdAsync(userId);
+        var todoLists = await todoListService.GetTodoListsByUserIdAsync();
         return Ok(todoLists);
     }
 

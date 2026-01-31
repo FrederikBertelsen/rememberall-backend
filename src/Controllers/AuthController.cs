@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
-using RememberAll.src.Entities;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;

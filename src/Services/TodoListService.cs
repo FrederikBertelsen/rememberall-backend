@@ -7,14 +7,19 @@ using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Services;
 
-public class TodoListService(IUserRepository userRepository, ITodoListRepository todoListRepository) : ITodoListService
+public class TodoListService(
+    IUserRepository userRepository, 
+    ITodoListRepository todoListRepository,
+    IListAccessRepository listAccessRepository,
+    ICurrentUserService currentUserService) : ITodoListService
 {
     public async Task<TodoListDto> CreateTodoListAsync(CreateTodoListDto createTodoListDto)
     {
         createTodoListDto.ValidateOrThrow();
 
-        User? owner = await userRepository.GetUserByIdAsync(createTodoListDto.OwnerId)
-            ?? throw new NotFoundException("User", "Id", createTodoListDto.OwnerId);
+        var userId = currentUserService.GetUserId();
+        User owner = await userRepository.GetUserByIdAsync(userId)
+            ?? throw new NotFoundException("User", "Id", userId);
 
         TodoList newTodoList = createTodoListDto.ToEntity(owner);
         TodoListDto todoListDto = (await todoListRepository.CreateTodoListAsync(newTodoList)).ToDto();
@@ -31,15 +36,16 @@ public class TodoListService(IUserRepository userRepository, ITodoListRepository
 
         TodoList? todoList = await todoListRepository.GetTodoListByIdAsync(listId)
             ?? throw new NotFoundException("List", "Id", listId);
+        
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), listId))
+            throw new AuthException("User does not have access to this list.");
 
         return todoList.ToDto();
     }
 
-    public async Task<ICollection<TodoListDto>> GetTodoListsByUserIdAsync(Guid userId)
+    public async Task<ICollection<TodoListDto>> GetTodoListsByUserIdAsync()
     {
-        if (userId == Guid.Empty)
-            throw new MissingValueException("User Id");
-
+        var userId = currentUserService.GetUserId();
         if (!await userRepository.UserExistsByIdAsync(userId))
             throw new NotFoundException("User", "Id", userId);
 
@@ -55,6 +61,9 @@ public class TodoListService(IUserRepository userRepository, ITodoListRepository
 
         TodoList? todoList = await todoListRepository.GetTodoListByIdAsync(listId)
             ?? throw new NotFoundException("List", "Id", listId);
+        
+        if (todoList.OwnerId != currentUserService.GetUserId())
+            throw new AuthException("User is not the owner of this list.");
 
         todoListRepository.DeleteTodoList(todoList);
 

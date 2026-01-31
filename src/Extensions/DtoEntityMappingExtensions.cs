@@ -42,7 +42,7 @@ public static class EntityDtoMappingExtensions
     {
         return new()
         {
-            OwnerId = createTodoListDto.OwnerId,
+            OwnerId = owner.Id,
             Owner = owner,
             Name = createTodoListDto.Name,
         };

@@ -42,8 +42,6 @@ public static class DtoValidationExtensions
     {
         if (createTodoListDto is null)
             throw new MissingValueException("TodoList data");
-        if (createTodoListDto.OwnerId == Guid.Empty)
-            throw new MissingValueException("TodoList", nameof(createTodoListDto.OwnerId));
         if (string.IsNullOrWhiteSpace(createTodoListDto.Name))
             throw new MissingValueException("TodoList", nameof(createTodoListDto.Name));
     }

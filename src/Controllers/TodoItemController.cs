@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
 
+[Authorize]
 [Route("api/todoitems")]
 [ApiController]
 public class TodoItemController(ITodoItemService todoItemService) : ControllerBase
@@ -22,14 +24,14 @@ public class TodoItemController(ITodoItemService todoItemService) : ControllerBa
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch("markcomplete")]
+    [HttpPatch("mark-complete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsComplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsCompleteAsync(itemId);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch("markincomplete")]
+    [HttpPatch("mark-incomplete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsIncomplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsIncompleteAsync(itemId);

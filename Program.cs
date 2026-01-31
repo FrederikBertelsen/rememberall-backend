@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
 using RememberAll.src.Data;
 using RememberAll.src.Repositories;
 using RememberAll.src.Repositories.Interfaces;

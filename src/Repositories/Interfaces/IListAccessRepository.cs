@@ -8,6 +8,7 @@ public interface IListAccessRepository
     public Task<ListAccess?> GetListAccessByIdAsync(Guid listAccessId);
     public Task<ICollection<ListAccess>> GetListAccesssByUserIdAsync(Guid userId);
     public Task<ICollection<ListAccess>> GetListAccessByListIdAsync(Guid listId);
+    public Task<bool> UserHasAccessToListAsync(Guid userId,  Guid listId);
     public void DeleteListAccess(ListAccess listAccess);
 
     public Task SaveChangesAsync();

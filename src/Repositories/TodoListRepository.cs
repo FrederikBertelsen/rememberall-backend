@@ -14,11 +14,26 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
                 .AsNoTracking()
                 .Include(todoList => todoList.Items)
                 .FirstOrDefaultAsync(todoList => todoList.Id == listId);
-    public async Task<ICollection<TodoList>> GetTodoListsByUserIdAsync(Guid userId) =>
-        await dbContext.TodoLists
-                .AsNoTracking()
-                .Where(todoList => todoList.OwnerId == userId)
-                .ToListAsync();
+    public async Task<ICollection<TodoList>> GetTodoListsByUserIdAsync(Guid userId)
+    {
+        var ownedLists = await dbContext.TodoLists
+            .AsNoTracking()
+            .Where(list => list.OwnerId == userId)
+            .ToListAsync();
+
+        var sharedLists = await dbContext.ListAccess
+            .AsNoTracking()
+            .Where(access => access.UserId == userId)
+            .Select(access => access.List)
+            .Distinct()
+            .ToListAsync();
+
+        var allLists = ownedLists
+            .Concat(sharedLists)
+            .ToList();
+
+        return allLists;
+    }
 
     public void DeleteTodoList(TodoList todoList) => dbContext.TodoLists.Remove(todoList);
     public async Task SaveChangesAsync() => await dbContext.SaveChangesAsync();

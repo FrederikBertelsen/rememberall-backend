@@ -1,31 +1,26 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
 
+[Authorize]
 [Route("api/listaccess")]
 [ApiController]
 public class ListAccessController(IListAccessService listAccessService) : ControllerBase
 {
-    [HttpPost("create")]
-    public async Task<ActionResult<ListAccessDto>> CreateListAccess(CreateListAccessDto newListAccessDto)
-    {
-        var createdListAccessDto = await listAccessService.CreateListAccessAsync(newListAccessDto);
-        return Ok(createdListAccessDto);
-    }
-
-    [HttpGet("bylist")]
+    [HttpGet("by-list")]
     public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByListId(Guid listId)
     {
         var listAccesses = await listAccessService.GetListAccesssByListIdAsync(listId);
         return Ok(listAccesses);
     }
 
-    [HttpGet("byuser")]
-    public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByUserId(Guid userId)
+    [HttpGet("by-user")]
+    public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByUser()
     {
-        var listAccesses = await listAccessService.GetListAccesssByUserIdAsync(userId);
+        var listAccesses = await listAccessService.GetListAccesssByUserAsync();
         return Ok(listAccesses);
     }
 
