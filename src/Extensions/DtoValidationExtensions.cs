@@ -1,5 +1,6 @@
 using RememberAll.src.DTOs;
 using RememberAll.src.Exceptions;
+using RememberAll.src.Utilities;
 
 namespace RememberAll.src.Extensions;
 
@@ -14,6 +15,13 @@ public static class DtoValidationExtensions
             throw new MissingValueException("User", nameof(createUserDto.Name));
         if (string.IsNullOrWhiteSpace(createUserDto.Email))
             throw new MissingValueException("User", nameof(createUserDto.Email));
+
+        if (string.IsNullOrWhiteSpace(createUserDto.Password))
+            throw new MissingValueException("User", nameof(createUserDto.Password));
+
+        PasswordValidationResult results = PasswordValidator.Validate(createUserDto.Password);
+        if (!results.IsValid)
+            throw new InvalidValueException("User", nameof(createUserDto.Password), results.ValidationErrors);
     }
 
     public static void ValidateOrThrow(this UserDto userDto)

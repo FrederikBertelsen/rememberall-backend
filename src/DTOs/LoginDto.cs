@@ -1,8 +1,7 @@
 namespace RememberAll.src.DTOs;
 
-public record CreateUserDto
+public record LoginDto
 (
-    string Name,
     string Email,
     string Password
 );

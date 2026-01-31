@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RememberAll.src.Exceptions;
 using RememberAll.src.Exceptions.Interfaces;
 
 namespace RememberAll.src.Middleware;
@@ -29,7 +30,12 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
         if (statusCode >= 500)
             logger.LogError(ex, "Server error: {Message}", ex.Message);
         else
-            logger.LogWarning(ex, "Client error: {Message}", ex.Message);
+        {
+            if (ex is AuthException authEx)
+                logger.LogWarning("Client error: {Message}", authEx.InternalMessage);
+            else
+                logger.LogWarning(ex, "Client error: {Message}", ex.Message);
+        }
 
         var problemDetails = new ProblemDetails
         {
@@ -47,6 +53,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
     private static string GetTitle(int statusCode) => statusCode switch
     {
         400 => "Bad Request",
+        401 => "Unauthorized",
         404 => "Not Found",
         409 => "Conflict",
         500 => "Internal Server Error",

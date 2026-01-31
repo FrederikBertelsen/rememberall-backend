@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using RememberAll.src.Data;
 using RememberAll.src.Repositories;
 using RememberAll.src.Repositories.Interfaces;
 using RememberAll.src.Services;
 using RememberAll.src.Services.Interfaces;
+using RememberAll.src.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +27,37 @@ builder.Services.AddScoped<IListAccessService, ListAccessService>();
 builder.Services.AddScoped<IInviteRepository, InviteRepository>();
 builder.Services.AddScoped<IInviteService, InviteService>();
 
+// Auth services
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddControllers();
+
+
+// Authentication (cookie-based)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.LoginPath = "/api/auth/login";
+    });
+
+// Allow SvelteKit dev origin to send cookies
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Svelte", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowCredentials()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
 
@@ -47,6 +80,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("Svelte");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
