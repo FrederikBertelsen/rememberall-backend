@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <!-- Output -->
+          <Format>cobertura,opencover</Format>
+
+          <!-- Exclusions -->
+          <ExcludeByAttribute>
+            Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute
+          </ExcludeByAttribute>
+
+          <ExcludeByFile>
+            **/*Designer.cs,
+            **/*.g.cs,**/*.g.i.cs,**/*Generated*.cs,
+            **/*.auto.cs,
+            **/bin/**,**/obj/**,
+            **/*Migrations/*.cs,**/*Migration*.cs
+          </ExcludeByFile>
+
+          <!-- Optional: reduce noise -->
+          <SkipAutoProps>true</SkipAutoProps>
+          <SingleHit>false</SingleHit>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
