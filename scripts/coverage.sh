@@ -6,8 +6,11 @@ echo "Generating code coverage report..."
 echo "=================================================="
 echo ""
 rm -fr CoverageReport
+rm -fr RememberAllBackend.Tests/TestResults/
+rm -fr RememberAllBackend.Tests/obj/
 rm -fr RememberAllBackend.Tests/bin/
 rm -fr RememberAllBackend/bin/
+rm -fr RememberAllBackend/obj/
 
 echo ""
 echo "=================================================="
@@ -37,7 +40,7 @@ if [ -z "$COVERAGE_FILE" ]; then
   exit 1
 fi
 
-ReportGenerator -reports:"$COVERAGE_FILE" -targetdir:CoverageReport
+ReportGenerator -reports:"$COVERAGE_FILE" -targetdir:CoverageReport -assemblyfilters:"-*Tests"
 
 echo ""
 echo "=================================================="
