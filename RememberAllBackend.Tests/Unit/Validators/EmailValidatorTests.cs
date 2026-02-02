@@ -1,7 +1,7 @@
 using FluentAssertions;
 using RememberAll.src.Utilities;
 
-namespace RememberAllBackend.Tests.Unit;
+namespace RememberAllBackend.Tests.Unit.Validators;
 
 public class EmailValidatorTests
 {

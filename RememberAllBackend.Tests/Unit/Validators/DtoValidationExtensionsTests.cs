@@ -7,7 +7,7 @@ using RememberAll.src.Extensions;
 
 #pragma warning disable CS8604 // Possible null reference argument - testing null scenarios
 
-namespace RememberAllBackend.Tests.Unit;
+namespace RememberAllBackend.Tests.Unit.Validators;
 
 public class DtoValidationExtensionsTests
 {
