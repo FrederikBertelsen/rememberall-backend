@@ -89,6 +89,8 @@ public partial class Program
 
         app.UseCors("Svelte");
 
+        app.UseMiddleware<GlobalExceptionMiddleware>();
+
         app.UseAuthentication();
 
         app.UseAuthorization();
