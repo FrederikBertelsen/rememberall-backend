@@ -1,4 +1,5 @@
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
 using RememberAll.src.Entities;
 using RememberAll.src.Exceptions;
 using RememberAll.src.Extensions;
@@ -27,7 +28,7 @@ public class InviteService(
 
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createInviteDto.ListId)
             ?? throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
-        
+
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, todoList.Id))
             throw new AuthException("User does not have access to the specified TodoList.");
 
@@ -92,7 +93,7 @@ public class InviteService(
 
         Invite invite = await inviteRepository.GetInviteByIdAsync(inviteId)
             ?? throw new NotFoundException("Invite", "Id", inviteId);
-        
+
         if (!currentUserService.IsCurrentUser(invite.InviteSenderId) &&
             !currentUserService.IsCurrentUser(invite.InviteRecieverId))
             throw new AuthException("User cannot delete an invite not addressed to or sent by them.");

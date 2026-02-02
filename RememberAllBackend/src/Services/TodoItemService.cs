@@ -1,4 +1,6 @@
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
+using RememberAll.src.DTOs.Update;
 using RememberAll.src.Entities;
 using RememberAll.src.Exceptions;
 using RememberAll.src.Extensions;
@@ -31,17 +33,17 @@ public class TodoItemService(
         return todoItemDto;
     }
 
-    public async Task<TodoItemDto> UpdateTodoItem(TodoItemDto todoItemDto)
+    public async Task<TodoItemDto> UpdateTodoItem(UpdateTodoItemDto updateTodoItemDto)
     {
-        todoItemDto.ValidateOrThrow();
+        updateTodoItemDto.ValidateOrThrow();
 
-        TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemDto.Id)
-            ?? throw new NotFoundException("Todo Item", "Id", todoItemDto.Id);
+        TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(updateTodoItemDto.Id)
+            ?? throw new NotFoundException("Todo Item", "Id", updateTodoItemDto.Id);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
             throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
 
-        todoItem.ApplyNonNullValuesFromDto(todoItemDto);
+        todoItem.ApplyNonNullValuesFromDto(updateTodoItemDto);
         todoItemRepository.UpdateTodoItem(todoItem);
 
         await todoItemRepository.SaveChangesAsync();

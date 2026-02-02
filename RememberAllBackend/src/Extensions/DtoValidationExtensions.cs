@@ -1,4 +1,6 @@
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
+using RememberAll.src.DTOs.Update;
 using RememberAll.src.Exceptions;
 using RememberAll.src.Utilities;
 
@@ -67,6 +69,15 @@ public static class DtoValidationExtensions
             throw new MissingValueException("TodoItem", nameof(createTodoItemDto.TodoListId));
         if (string.IsNullOrWhiteSpace(createTodoItemDto.Text))
             throw new MissingValueException("TodoItem", nameof(createTodoItemDto.Text));
+    }
+    public static void ValidateOrThrow(this UpdateTodoItemDto updateTodoItemDto)
+    {
+        if (updateTodoItemDto is null)
+            throw new MissingValueException("TodoItem data");
+        if (updateTodoItemDto.Id == Guid.Empty)
+            throw new MissingValueException("TodoItem", nameof(updateTodoItemDto.Id));
+        if (updateTodoItemDto.Text is not null && string.IsNullOrWhiteSpace(updateTodoItemDto.Text))
+            throw new MissingValueException("TodoItem", nameof(updateTodoItemDto.Text));
     }
     public static void ValidateOrThrow(this TodoItemDto todoItemDto)
     {

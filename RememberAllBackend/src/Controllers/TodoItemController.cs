@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
+using RememberAll.src.DTOs.Update;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
@@ -18,9 +20,9 @@ public class TodoItemController(ITodoItemService todoItemService) : ControllerBa
     }
 
     [HttpPatch("update")]
-    public async Task<ActionResult<TodoItemDto>> UpdateTodoItem(TodoItemDto todoItemDto)
+    public async Task<ActionResult<TodoItemDto>> UpdateTodoItem(UpdateTodoItemDto updateTodoItemDto)
     {
-        var updatedTodoItemDto = await todoItemService.UpdateTodoItem(todoItemDto);
+        var updatedTodoItemDto = await todoItemService.UpdateTodoItem(updateTodoItemDto);
         return Ok(updatedTodoItemDto);
     }
 

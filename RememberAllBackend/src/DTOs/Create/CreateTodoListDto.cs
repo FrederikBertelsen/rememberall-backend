@@ -1,4 +1,4 @@
-namespace RememberAll.src.DTOs;
+namespace RememberAll.src.DTOs.Create;
 
 public record CreateTodoListDto
 (

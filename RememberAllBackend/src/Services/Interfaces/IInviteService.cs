@@ -1,4 +1,5 @@
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
 
 namespace RememberAll.src.Services.Interfaces;
 
