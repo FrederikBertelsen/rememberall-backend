@@ -25,8 +25,15 @@ public class AuthService(
     {
         createUserDto.ValidateOrThrow();
 
+        var passwordValidation = PasswordValidator.Validate(createUserDto.Password);
+        if (!passwordValidation.IsValid)
+            throw new ArgumentException(passwordValidation.ValidationErrors);
+
+        if (!EmailValidator.Validate(createUserDto.Email))
+            throw new ArgumentException("Invalid email format");
+
         if (await userRepository.UserExistsByEmailAsync(createUserDto.Email))
-            throw new AlreadyExistsException("User", "Email", createUserDto.Email);
+            throw new AuthException(new AlreadyExistsException("User", "Email", createUserDto.Email).Message);
 
         User newUser = createUserDto.ToEntity();
 
