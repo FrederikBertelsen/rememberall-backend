@@ -89,6 +89,9 @@ public static class EntityDtoMappingExtensions
             CompletionCount: todoItem.CompletionCount
         );
     }
+
+    public static ICollection<TodoItemDto> ToDtos(this ICollection<TodoItem> todoItems) =>
+        todoItems.Select(item => item.ToDto()).ToList();
     #endregion
 
     #region ListAccess Mappings
