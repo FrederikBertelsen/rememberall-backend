@@ -8,6 +8,7 @@ using RememberAll.src.Services;
 using RememberAll.src.Services.Interfaces;
 using RememberAll.src.Entities;
 using Microsoft.OpenApi;
+using RememberAll.src.Middleware;
 
 namespace RememberAll;
 
@@ -49,7 +50,7 @@ public partial class Program
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = builder.Environment.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
                 options.LoginPath = "/api/auth/login";
             });
 
