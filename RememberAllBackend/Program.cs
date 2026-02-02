@@ -11,9 +11,11 @@ using Microsoft.OpenApi;
 
 namespace RememberAll;
 
-public class Program
+public partial class Program
 {
-    private static void Main(string[] args)
+    private static void Main(string[] args) => CreateWebApplication(args).Run();
+
+    public static WebApplication CreateWebApplication(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +110,6 @@ public class Program
             }
         }
 
-        app.Run();
+        return app;
     }
 }
