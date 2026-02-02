@@ -7,11 +7,11 @@ namespace RememberAllBackend.Tests.Helpers;
 
 public static class TestData
 {
-    private const string DefaultName = "Test User";
-    private const string DefaultEmail = "user@example.com";
-    private const string DefaultPassword = "TestPass1234!@#";
-    private const string DefaultListName = "Test List";
-    private const string DefaultItemText = "Test Item";
+    public static readonly string DefaultUserName = "Test User";
+    public static readonly string DefaultEmail = "user@example.com";
+    public static readonly string DefaultPassword = "TestPass1234!@#";
+    public static readonly string DefaultListName = "Test List";
+    public static readonly string DefaultItemText = "Test Item";
 
     #region Builder Factory Methods
 
@@ -33,7 +33,7 @@ public static class TestData
         string? password = null)
     {
         return new CreateUserDto(
-            name ?? DefaultName,
+            name ?? DefaultUserName,
             email ?? DefaultEmail,
             password ?? DefaultPassword);
     }
@@ -81,7 +81,7 @@ public static class TestData
     public class UserBuilder
     {
         private Guid? _id;
-        private string _name = DefaultName;
+        private string _name = DefaultUserName;
         private string _email = DefaultEmail;
         private readonly List<TodoList> _lists = [];
 
@@ -285,7 +285,7 @@ public static class TestData
 
     public class ScenarioBuilder
     {
-        private string _userName = DefaultName;
+        private string _userName = DefaultUserName;
         private string _userEmail = DefaultEmail;
         private string _listName = DefaultListName;
         private int _itemCount = 3;
@@ -367,8 +367,8 @@ public static class TestData
             for (int i = 0; i < userCount; i++)
             {
                 var user = User()
-                    .WithName($"{DefaultName} {i}")
-                    .WithEmail($"{DefaultName.ToLower().Replace(" ", "")}{i}@example.com")
+                    .WithName($"{DefaultUserName} {i}")
+                    .WithEmail($"{DefaultUserName.ToLower().Replace(" ", "")}{i}@example.com")
                     .Build();
 
                 var lists = new List<TodoList>();
