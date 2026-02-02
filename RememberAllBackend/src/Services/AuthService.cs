@@ -1,9 +1,11 @@
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
 using RememberAll.src.Entities;
 using RememberAll.src.Exceptions;
 using RememberAll.src.Extensions;
@@ -13,7 +15,11 @@ using RememberAll.src.Utilities;
 
 namespace RememberAll.src.Services;
 
-public class AuthService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IHttpContextAccessor httpContextAccessor) : IAuthService
+public class AuthService(
+    IUserRepository userRepository,
+    IPasswordHasher<User> passwordHasher,
+    IHttpContextAccessor httpContextAccessor,
+    ICurrentUserService currentUserService) : IAuthService
 {
     public async Task<UserDto> Register(CreateUserDto createUserDto)
     {
@@ -101,5 +107,17 @@ public class AuthService(IUserRepository userRepository, IPasswordHasher<User> p
         return claimsPrincipal;
     }
 
+    public async Task DeleteAccount()
+    {
+        var userId = currentUserService.GetUserId();
 
+        var User = await userRepository.GetUserByIdAsync(userId)
+            ?? throw new NotFoundException("User", "Id", userId);
+
+        userRepository.DeleteUser(User);
+
+        await userRepository.SaveChangesAsync();
+
+        await Logout();
+    }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RememberAll.src.DTOs;
+using RememberAll.src.DTOs.Create;
 using RememberAll.src.Services.Interfaces;
 
 namespace RememberAll.src.Controllers;
@@ -45,5 +46,13 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         UserDto? user = await authService.Me();
         return Ok(user);
+    }
+
+    [Authorize]
+    [HttpDelete("delete-account")]
+    public async Task<ActionResult> DeleteAccount()
+    {
+        await authService.DeleteAccount();
+        return NoContent();
     }
 }
