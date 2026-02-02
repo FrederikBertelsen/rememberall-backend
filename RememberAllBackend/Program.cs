@@ -19,7 +19,6 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IUserService, UserService>();
 
         builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
         builder.Services.AddScoped<ITodoListService, TodoListService>();

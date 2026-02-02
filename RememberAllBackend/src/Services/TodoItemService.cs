@@ -23,7 +23,7 @@ public class TodoItemService(
             ?? throw new NotFoundException("List", "Id", createTodoItemDto.TodoListId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoList.Id))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
 
         TodoItem newTodoItem = createTodoItemDto.ToEntity(todoList);
         TodoItemDto todoItemDto = (await todoItemRepository.CreateTodoItemAsync(newTodoItem)).ToDto();
@@ -41,7 +41,7 @@ public class TodoItemService(
             ?? throw new NotFoundException("Todo Item", "Id", updateTodoItemDto.Id);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
 
         todoItem.ApplyNonNullValuesFromDto(updateTodoItemDto);
         todoItemRepository.UpdateTodoItem(todoItem);
@@ -60,7 +60,7 @@ public class TodoItemService(
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
 
         if (todoItem.IsCompleted)
             throw new BusinessLogicException("TodoItem is already completed");
@@ -81,7 +81,7 @@ public class TodoItemService(
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
 
         if (!todoItem.IsCompleted)
             throw new BusinessLogicException("TodoItem is already incomplete");
@@ -99,7 +99,7 @@ public class TodoItemService(
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoItem.TodoListId))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
 
         todoItemRepository.DeleteTodoItem(todoItem);
 

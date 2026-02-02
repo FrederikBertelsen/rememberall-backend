@@ -62,7 +62,7 @@ public class TodoListService(
             ?? throw new NotFoundException("List", "Id", updateTodoListDto.Id);
         
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoList.Id))
-            throw new UnauthorizedAccessException("User does not have access to the specified Todo List");
+            throw new AuthException("User does not have access to the specified Todo List");
         
         todoList.ApplyNonNullValuesFromDto(updateTodoListDto);
         todoListRepository.UpdateTodoList(todoList);
