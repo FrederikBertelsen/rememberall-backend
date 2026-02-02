@@ -2,7 +2,7 @@ namespace RememberAll.src.Entities;
 
 public class TodoItem : BaseEntity
 {
-    public required Guid TodoListId { get; init; }
+    public required Guid TodoListId { get; set; }
     public TodoList? TodoList { get; set; }
     public required string Text { get; set; }
     public bool IsCompleted { get; private set; } = false;
