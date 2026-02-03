@@ -26,13 +26,13 @@ public class ListAccessService(
     public async Task<ICollection<ListAccessDto>> GetListAccesssByListIdAsync(Guid listId)
     {
         if (listId == Guid.Empty)
-            throw new MissingValueException("ListAccess", "ListId");
+            throw new MissingValueException("List Id");
 
         ICollection<ListAccess> listAccess = await listAccessRepository.GetListAccessByListIdAsync(listId)
             ?? throw new NotFoundException("ListAccess", "ListId", listId);
 
-        if (!listAccess.Any(listAccess => !currentUserService.IsCurrentUser(listAccess.UserId)))
-            throw new AuthException("User Doesn't have access to todo list.");
+        if (!listAccess.Any(la => currentUserService.IsCurrentUser(la.UserId)))
+            throw new ForbiddenException("User Doesn't have access to todo list.");
 
         return listAccess.ToDtos();
     }
@@ -40,7 +40,7 @@ public class ListAccessService(
     public async Task DeleteListAccessAsync(Guid listAccessId)
     {
         if (listAccessId == Guid.Empty)
-            throw new MissingValueException("ListAccess", "Id");
+            throw new MissingValueException("ListAccess Id");
 
         ListAccess listAccess = await listAccessRepository.GetListAccessByIdAsync(listAccessId)
             ?? throw new NotFoundException("ListAccess", "Id", listAccessId);
@@ -48,7 +48,7 @@ public class ListAccessService(
         var userId = currentUserService.GetUserId();
 
         if (listAccess.List!.OwnerId != userId && listAccess.UserId != userId)
-            throw new AuthException("User is neither the owner of the todo list nor the user of the list access.");
+            throw new ForbiddenException("User is neither the owner of the todo list nor the user of the list access.");
 
         listAccessRepository.DeleteListAccess(listAccess);
 

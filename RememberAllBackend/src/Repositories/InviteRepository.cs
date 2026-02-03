@@ -12,6 +12,7 @@ public class InviteRepository(AppDbContext dbContext) : IInviteRepository
     public async Task<ICollection<Invite>> GetRecievedInvitesByUserId(Guid userId) =>
         await dbContext.Invites
             .Include(invite => invite.InviteSender)
+            .Include(invite => invite.List)
             .AsNoTracking()
             .Where(invite => invite.InviteRecieverId == userId)
             .ToListAsync();
@@ -19,6 +20,7 @@ public class InviteRepository(AppDbContext dbContext) : IInviteRepository
     public async Task<ICollection<Invite>> GetSentInvitesByUserId(Guid userId) =>
         await dbContext.Invites
             .Include(invite => invite.InviteReciever)
+            .Include(invite => invite.List)
             .AsNoTracking()
             .Where(invite => invite.InviteSenderId == userId)
             .ToListAsync();

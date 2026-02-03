@@ -145,9 +145,9 @@ public static class EntityDtoMappingExtensions
         return new(
             Id: invite.Id,
             InviteSenderId: invite.InviteSenderId,
-            InviteSenderName: invite.InviteSender!.Name,
+            InviteSenderName: invite.InviteSender?.Name,
             InviteRecieverId: invite.InviteRecieverId,
-            InviteRecieverName: invite.InviteReciever!.Name,
+            InviteRecieverName: invite.InviteReciever?.Name,
             ListId: invite.ListId,
             ListName: invite.List!.Name
         );

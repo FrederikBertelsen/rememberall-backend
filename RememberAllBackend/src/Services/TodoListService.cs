@@ -40,7 +40,7 @@ public class TodoListService(
             ?? throw new NotFoundException("List", "Id", listId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), listId))
-            throw new AuthException("User does not have access to this list.");
+            throw new ForbiddenException("User does not have access to this list.");
 
         return todoList.ToDto();
     }
@@ -62,7 +62,7 @@ public class TodoListService(
             ?? throw new NotFoundException("List", "Id", updateTodoListDto.Id);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoList.Id))
-            throw new AuthException("User does not have access to the specified Todo List");
+            throw new ForbiddenException("User does not have access to the specified Todo List");
 
         todoList.ApplyNonNullValuesFromDto(updateTodoListDto);
         todoListRepository.UpdateTodoList(todoList);
@@ -81,7 +81,7 @@ public class TodoListService(
             ?? throw new NotFoundException("List", "Id", listId);
 
         if (todoList.OwnerId != currentUserService.GetUserId())
-            throw new AuthException("User is not the owner of this list.");
+            throw new ForbiddenException("User is not the owner of this list.");
 
         todoListRepository.DeleteTodoList(todoList);
 

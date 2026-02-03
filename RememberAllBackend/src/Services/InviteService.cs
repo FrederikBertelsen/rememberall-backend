@@ -30,12 +30,16 @@ public class InviteService(
             ?? throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
 
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, todoList.Id))
-            throw new AuthException("User does not have access to the specified TodoList.");
+            throw new ForbiddenException("User does not have access to the specified TodoList.");
 
         Invite newInvite = createInviteDto.ToEntity(currentUserId);
-        Invite createdInvite = await inviteRepository.CreateInviteAsync(newInvite);
+        newInvite = await inviteRepository.CreateInviteAsync(newInvite);
 
         await inviteRepository.SaveChangesAsync();
+
+        // Retrieve the invite with all navigation properties loaded
+        Invite createdInvite = await inviteRepository.GetInviteByIdAsync(newInvite.Id)
+            ?? throw new BusinessLogicException("Failed to retrieve the created invite.");
 
         return createdInvite.ToDto();
     }
@@ -76,7 +80,7 @@ public class InviteService(
             throw new InvalidOperationException("Invite's sender is not the owner of the list.");
 
         if (!currentUserService.IsCurrentUser(invite.InviteRecieverId))
-            throw new AuthException("User cannot accept an invite not addressed to them.");
+            throw new ForbiddenException("User cannot accept an invite not addressed to them.");
 
         ListAccess newListAccess = invite.ToListAccess();
         await listAccessRepository.CreateListAccessAsync(newListAccess);
@@ -96,7 +100,7 @@ public class InviteService(
 
         if (!currentUserService.IsCurrentUser(invite.InviteSenderId) &&
             !currentUserService.IsCurrentUser(invite.InviteRecieverId))
-            throw new AuthException("User cannot delete an invite not addressed to or sent by them.");
+            throw new ForbiddenException("User cannot delete an invite not addressed to or sent by them.");
 
         inviteRepository.DeleteInvite(invite);
 
