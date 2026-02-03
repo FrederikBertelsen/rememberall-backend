@@ -31,7 +31,7 @@ public class ListAccessService(
         ICollection<ListAccess> listAccess = await listAccessRepository.GetListAccessByListIdAsync(listId)
             ?? throw new NotFoundException("ListAccess", "ListId", listId);
 
-        if (!listAccess.Any(la => currentUserService.IsCurrentUser(la.UserId)))
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), listId))
             throw new ForbiddenException("User Doesn't have access to todo list.");
 
         return listAccess.ToDtos();
