@@ -60,10 +60,10 @@ public class TodoListService(
     {
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(updateTodoListDto.Id)
             ?? throw new NotFoundException("List", "Id", updateTodoListDto.Id);
-        
+
         if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoList.Id))
             throw new AuthException("User does not have access to the specified Todo List");
-        
+
         todoList.ApplyNonNullValuesFromDto(updateTodoListDto);
         todoListRepository.UpdateTodoList(todoList);
 
@@ -72,7 +72,7 @@ public class TodoListService(
         return todoList.ToDto();
     }
 
-    public async Task DeleteTodoList(Guid listId)
+    public async Task DeleteTodoListAsync(Guid listId)
     {
         if (listId == Guid.Empty)
             throw new MissingValueException("List Id");

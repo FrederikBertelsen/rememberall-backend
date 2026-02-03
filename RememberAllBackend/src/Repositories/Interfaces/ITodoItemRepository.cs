@@ -6,6 +6,7 @@ public interface ITodoItemRepository
 {
     public Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem);
     public Task<TodoItem?> GetTodoItemByIdAsync(Guid todoItemId);
+    public Task<ICollection<TodoItem>> GetTodoItemsByListIdAsync(Guid todoListId);
     public TodoItem UpdateTodoItem(TodoItem todoItem);
     public TodoItem MarkTodoItemAsComplete(TodoItem todoItem);
     public TodoItem MarkTodoItemAsIncomplete(TodoItem todoItem);

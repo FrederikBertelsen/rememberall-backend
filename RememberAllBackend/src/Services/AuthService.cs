@@ -49,6 +49,8 @@ public class AuthService(
     }
     public async Task<UserDto> Login(LoginDto loginDto)
     {
+        loginDto.ValidateOrThrow();
+
         User user = await userRepository.GetUserByEmailAsync(loginDto.Email)
             ?? throw new AuthException(new NotFoundException("User", "Email", loginDto.Email).Message);
 

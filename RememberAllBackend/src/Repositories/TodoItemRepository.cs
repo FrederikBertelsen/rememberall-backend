@@ -8,7 +8,15 @@ namespace RememberAll.src.Repositories;
 public class TodoItemRepository(AppDbContext dbContext) : ITodoItemRepository
 {
     public async Task<TodoItem> CreateTodoItemAsync(TodoItem todoItem) => (await dbContext.TodoItems.AddAsync(todoItem)).Entity;
-    public async Task<TodoItem?> GetTodoItemByIdAsync(Guid todoItemId) => await dbContext.TodoItems.AsNoTracking().FirstOrDefaultAsync(t => t.Id == todoItemId);
+    public async Task<ICollection<TodoItem>> GetTodoItemsByListIdAsync(Guid todoListId) =>
+        await dbContext.TodoItems
+            .AsNoTracking()
+            .Where(t => t.TodoListId == todoListId)
+            .ToListAsync();
+    public async Task<TodoItem?> GetTodoItemByIdAsync(Guid todoItemId) =>
+        await dbContext.TodoItems
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == todoItemId);
 
     public TodoItem UpdateTodoItem(TodoItem todoItem) => dbContext.TodoItems.Update(todoItem).Entity;
     public TodoItem MarkTodoItemAsComplete(TodoItem todoItem)

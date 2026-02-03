@@ -7,9 +7,10 @@ namespace RememberAll.src.Services.Interfaces;
 public interface ITodoItemService
 {
     public Task<TodoItemDto> CreateTodoItemAsync(CreateTodoItemDto createTodoItemDto);
-    public Task<TodoItemDto> UpdateTodoItem(UpdateTodoItemDto updateTodoItemDto);
+    public Task<ICollection<TodoItemDto>> GetTodoItemsByListIdAsync(Guid todoListId);
+    public Task<TodoItemDto> UpdateTodoItemAsync(UpdateTodoItemDto updateTodoItemDto);
 
     public Task<TodoItemDto> MarkTodoItemAsCompleteAsync(Guid todoItemId);
     public Task<TodoItemDto> MarkTodoItemAsIncompleteAsync(Guid todoItemId);
-    public Task DeleteTodoItem(Guid todoItemId);
+    public Task DeleteTodoItemAsync(Guid todoItemId);
 }

@@ -10,21 +10,22 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class ListAccessController(IListAccessService listAccessService) : ControllerBase
 {
-    [HttpGet("by-list")]
-    public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByListId(Guid listId)
+    [HttpGet]
+    public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccess([FromQuery] Guid? listId = null)
     {
-        var listAccesses = await listAccessService.GetListAccesssByListIdAsync(listId);
-        return Ok(listAccesses);
+        if (listId.HasValue)
+        {
+            var listAccesses = await listAccessService.GetListAccesssByListIdAsync(listId.Value);
+            return Ok(listAccesses);
+        }
+        else
+        {
+            var listAccesses = await listAccessService.GetListAccesssByUserAsync();
+            return Ok(listAccesses);
+        }
     }
 
-    [HttpGet("by-user")]
-    public async Task<ActionResult<ICollection<ListAccessDto>>> GetListAccessByUser()
-    {
-        var listAccesses = await listAccessService.GetListAccesssByUserAsync();
-        return Ok(listAccesses);
-    }
-
-    [HttpDelete("delete")]
+    [HttpDelete("{listAccessId}")]
     public async Task<IActionResult> DeleteListAccess(Guid listAccessId)
     {
         await listAccessService.DeleteListAccessAsync(listAccessId);

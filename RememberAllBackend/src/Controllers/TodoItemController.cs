@@ -12,38 +12,45 @@ namespace RememberAll.src.Controllers;
 [ApiController]
 public class TodoItemController(ITodoItemService todoItemService) : ControllerBase
 {
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<TodoItemDto>> CreateTodoItem(CreateTodoItemDto newTodoItemDto)
     {
         var createdTodoItemDto = await todoItemService.CreateTodoItemAsync(newTodoItemDto);
         return Ok(createdTodoItemDto);
     }
 
-    [HttpPatch("update")]
+    [HttpGet("bylist/{listId}")]
+    public async Task<ActionResult<ICollection<TodoItemDto>>> GetTodoItemsByListId(Guid listId)
+    {
+        var todoItems = await todoItemService.GetTodoItemsByListIdAsync(listId);
+        return Ok(todoItems);
+    }
+
+    [HttpPatch]
     public async Task<ActionResult<TodoItemDto>> UpdateTodoItem(UpdateTodoItemDto updateTodoItemDto)
     {
-        var updatedTodoItemDto = await todoItemService.UpdateTodoItem(updateTodoItemDto);
+        var updatedTodoItemDto = await todoItemService.UpdateTodoItemAsync(updateTodoItemDto);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch("mark-complete")]
+    [HttpPatch("{itemId}/complete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsComplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsCompleteAsync(itemId);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpPatch("mark-incomplete")]
+    [HttpPatch("{itemId}/incomplete")]
     public async Task<ActionResult<TodoItemDto>> MarkTodoItemAsIncomplete(Guid itemId)
     {
         var updatedTodoItemDto = await todoItemService.MarkTodoItemAsIncompleteAsync(itemId);
         return Ok(updatedTodoItemDto);
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("{itemId}")]
     public async Task<IActionResult> DeleteTodoItem(Guid itemId)
     {
-        await todoItemService.DeleteTodoItem(itemId);
+        await todoItemService.DeleteTodoItemAsync(itemId);
         return NoContent();
     }
 }

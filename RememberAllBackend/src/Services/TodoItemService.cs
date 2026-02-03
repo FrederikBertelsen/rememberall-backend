@@ -33,7 +33,20 @@ public class TodoItemService(
         return todoItemDto;
     }
 
-    public async Task<TodoItemDto> UpdateTodoItem(UpdateTodoItemDto updateTodoItemDto)
+    public async Task<ICollection<TodoItemDto>> GetTodoItemsByListIdAsync(Guid todoListId)
+    {
+        if (todoListId == Guid.Empty)
+            throw new MissingValueException("TodoList Id");
+
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserService.GetUserId(), todoListId))
+            throw new AuthException("User does not have access to the specified Todo List");
+
+        ICollection<TodoItem> todoItems = await todoItemRepository.GetTodoItemsByListIdAsync(todoListId);
+
+        return todoItems.ToDtos();
+    }
+
+    public async Task<TodoItemDto> UpdateTodoItemAsync(UpdateTodoItemDto updateTodoItemDto)
     {
         updateTodoItemDto.ValidateOrThrow();
 
@@ -93,7 +106,7 @@ public class TodoItemService(
         return todoItem.ToDto();
     }
 
-    public async Task DeleteTodoItem(Guid todoItemId)
+    public async Task DeleteTodoItemAsync(Guid todoItemId)
     {
         TodoItem todoItem = await todoItemRepository.GetTodoItemByIdAsync(todoItemId)
             ?? throw new NotFoundException("Todo Item", "Id", todoItemId);

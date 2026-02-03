@@ -10,5 +10,5 @@ public interface ITodoListService
     public Task<TodoListDto?> GetTodoListByIdAsync(Guid listId);
     public Task<ICollection<TodoListDto>> GetTodoListsByUserIdAsync();
     public Task<TodoListDto> UpdateTodoListAsync(UpdateTodoListDto updateTodoListDto);
-    public Task DeleteTodoList(Guid listId);
+    public Task DeleteTodoListAsync(Guid listId);
 }

@@ -127,4 +127,18 @@ public static class DtoValidationExtensions
             throw new MissingValueException("Invite", nameof(createInviteDto.ListId));
     }
     #endregion
+
+    #region Auth Validations
+    public static void ValidateOrThrow(this LoginDto loginDto)
+    {
+        if (loginDto is null)
+            throw new MissingValueException("Login data");
+        if (string.IsNullOrWhiteSpace(loginDto.Email))
+            throw new MissingValueException("User", nameof(loginDto.Email));
+        if (!EmailValidator.Validate(loginDto.Email))
+            throw new InvalidValueException("User", nameof(loginDto.Email), "Invalid email format");
+        if (string.IsNullOrWhiteSpace(loginDto.Password))
+            throw new MissingValueException("User", nameof(loginDto.Password));
+    }
+    #endregion
 }

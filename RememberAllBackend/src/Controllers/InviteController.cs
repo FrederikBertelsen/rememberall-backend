@@ -12,7 +12,7 @@ namespace RememberAll.src.Controllers;
 public class InviteController(IInviteService inviteService) : ControllerBase
 {
 
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<InviteDto>> CreateInvite(CreateInviteDto createInviteDto)
     {
         var createdInviteDto = await inviteService.CreateInviteAsync(createInviteDto);
@@ -33,14 +33,14 @@ public class InviteController(IInviteService inviteService) : ControllerBase
         return Ok(invites);
     }
 
-    [HttpPost("accept")]
+    [HttpPatch("{inviteId}/accept")]
     public async Task<IActionResult> AcceptInvite(Guid inviteId)
     {
         await inviteService.AcceptInviteByIdAsync(inviteId);
         return NoContent();
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("{inviteId}")]
     public async Task<IActionResult> DeleteInvite(Guid inviteId)
     {
         await inviteService.DeleteInviteByIdAsync(inviteId);
