@@ -44,6 +44,7 @@ public class InviteServiceTests
         mockTodoListRepo.Setup(r => r.GetTodoListByIdAsync(list.Id)).ReturnsAsync(list);
         mockListAccessRepo.Setup(r => r.UserHasAccessToListAsync(sender.Id, list.Id)).ReturnsAsync(true);
         mockInviteRepo.Setup(r => r.CreateInviteAsync(It.IsAny<Invite>())).ReturnsAsync(invite);
+        mockInviteRepo.Setup(r => r.GetInviteByIdAsync(invite.Id)).ReturnsAsync(invite);
 
         var service = new InviteService(mockUserRepo.Object, mockTodoListRepo.Object, mockInviteRepo.Object, mockListAccessRepo.Object, mockCurrentUser.Object);
         var createDto = new CreateInviteDto(receiver.Id, list.Id);
@@ -162,7 +163,7 @@ public class InviteServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.CreateInviteAsync(createDto))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
@@ -408,7 +409,7 @@ public class InviteServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.AcceptInviteByIdAsync(invite.Id))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
@@ -562,7 +563,7 @@ public class InviteServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.DeleteInviteByIdAsync(invite.Id))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion

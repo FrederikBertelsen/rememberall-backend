@@ -109,7 +109,7 @@ public class TodoItemServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.CreateTodoItemAsync(dto))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
@@ -137,7 +137,7 @@ public class TodoItemServiceTests
         var dto = new UpdateTodoItemDto(item.Id, "New text");
 
         // Act
-        var result = await service.UpdateTodoItem(dto);
+        var result = await service.UpdateTodoItemAsync(dto);
 
         // Assert
         result.Should().NotBeNull();
@@ -164,7 +164,7 @@ public class TodoItemServiceTests
         var dto = new UpdateTodoItemDto(itemId, "New text");
 
         // Act & Assert
-        await service.Invoking(s => s.UpdateTodoItem(dto))
+        await service.Invoking(s => s.UpdateTodoItemAsync(dto))
             .Should().ThrowAsync<NotFoundException>();
     }
 
@@ -189,8 +189,8 @@ public class TodoItemServiceTests
         var dto = new UpdateTodoItemDto(item.Id, "New text");
 
         // Act & Assert
-        await service.Invoking(s => s.UpdateTodoItem(dto))
-            .Should().ThrowAsync<AuthException>();
+        await service.Invoking(s => s.UpdateTodoItemAsync(dto))
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
@@ -284,7 +284,7 @@ public class TodoItemServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.MarkTodoItemAsCompleteAsync(item.Id))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     [Fact]
@@ -407,7 +407,7 @@ public class TodoItemServiceTests
         var service = new TodoItemService(mockTodoListRepo.Object, mockTodoItemRepo.Object, mockListAccessRepo.Object, mockCurrentUser.Object);
 
         // Act
-        await service.DeleteTodoItem(item.Id);
+        await service.DeleteTodoItemAsync(item.Id);
 
         // Assert
         mockTodoItemRepo.Verify(r => r.DeleteTodoItem(item), Times.Once);
@@ -432,7 +432,7 @@ public class TodoItemServiceTests
         var service = new TodoItemService(mockTodoListRepo.Object, mockTodoItemRepo.Object, mockListAccessRepo.Object, mockCurrentUser.Object);
 
         // Act & Assert
-        await service.Invoking(s => s.DeleteTodoItem(itemId))
+        await service.Invoking(s => s.DeleteTodoItemAsync(itemId))
             .Should().ThrowAsync<NotFoundException>();
     }
 
@@ -456,8 +456,8 @@ public class TodoItemServiceTests
         var service = new TodoItemService(mockTodoListRepo.Object, mockTodoItemRepo.Object, mockListAccessRepo.Object, mockCurrentUser.Object);
 
         // Act & Assert
-        await service.Invoking(s => s.DeleteTodoItem(item.Id))
-            .Should().ThrowAsync<AuthException>();
+        await service.Invoking(s => s.DeleteTodoItemAsync(item.Id))
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion

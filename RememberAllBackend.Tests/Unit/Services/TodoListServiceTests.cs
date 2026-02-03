@@ -191,7 +191,7 @@ public class TodoListServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.GetTodoListByIdAsync(listId))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
@@ -342,7 +342,7 @@ public class TodoListServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.UpdateTodoListAsync(updateDto))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
 
         todoListRepo.Verify(r => r.UpdateTodoList(It.IsAny<TodoList>()), Times.Never);
         todoListRepo.Verify(r => r.SaveChangesAsync(), Times.Never);
@@ -376,7 +376,7 @@ public class TodoListServiceTests
         var service = new TodoListService(userRepo.Object, todoListRepo.Object, listAccessRepo.Object, currentUser.Object);
 
         // Act
-        await service.DeleteTodoList(listId);
+        await service.DeleteTodoListAsync(listId);
 
         // Assert
         todoListRepo.Verify(r => r.DeleteTodoList(todoList), Times.Once);
@@ -395,7 +395,7 @@ public class TodoListServiceTests
         var service = new TodoListService(userRepo.Object, todoListRepo.Object, listAccessRepo.Object, currentUser.Object);
 
         // Act & Assert
-        await service.Invoking(s => s.DeleteTodoList(Guid.Empty))
+        await service.Invoking(s => s.DeleteTodoListAsync(Guid.Empty))
             .Should().ThrowAsync<MissingValueException>();
     }
 
@@ -417,7 +417,7 @@ public class TodoListServiceTests
         var service = new TodoListService(userRepo.Object, todoListRepo.Object, listAccessRepo.Object, currentUser.Object);
 
         // Act & Assert
-        await service.Invoking(s => s.DeleteTodoList(listId))
+        await service.Invoking(s => s.DeleteTodoListAsync(listId))
             .Should().ThrowAsync<NotFoundException>();
     }
 
@@ -446,8 +446,8 @@ public class TodoListServiceTests
         var service = new TodoListService(userRepo.Object, todoListRepo.Object, listAccessRepo.Object, currentUser.Object);
 
         // Act & Assert
-        await service.Invoking(s => s.DeleteTodoList(listId))
-            .Should().ThrowAsync<AuthException>();
+        await service.Invoking(s => s.DeleteTodoListAsync(listId))
+            .Should().ThrowAsync<ForbiddenException>();
 
         todoListRepo.Verify(r => r.DeleteTodoList(It.IsAny<TodoList>()), Times.Never);
         todoListRepo.Verify(r => r.SaveChangesAsync(), Times.Never);

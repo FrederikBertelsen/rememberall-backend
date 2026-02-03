@@ -170,7 +170,7 @@ public class ListAccessServiceTests
     }
 
     [Fact]
-    public async Task DeleteListAccessAsync_ThrowsAuth_WhenUnauthorized()
+    public async Task DeleteListAccessAsync_ThrowsForbidden_WhenUnauthorized()
     {
         // Arrange
         var userId = Guid.NewGuid();
@@ -190,7 +190,7 @@ public class ListAccessServiceTests
 
         // Act & Assert
         await service.Invoking(s => s.DeleteListAccessAsync(listAccess.Id))
-            .Should().ThrowAsync<AuthException>();
+            .Should().ThrowAsync<ForbiddenException>();
     }
 
     #endregion
