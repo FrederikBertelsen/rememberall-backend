@@ -36,6 +36,12 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
         return allLists;
     }
 
+    public async Task<DateTime> GetTodoListUpdatedAtAsync(Guid listId) =>
+        await dbContext.TodoLists
+            .Where(list => list.Id == listId)
+            .Select(list => list.UpdatedAt)
+            .FirstOrDefaultAsync();
+
     public Task<bool> TodoListExistsByIdAsync(Guid listId) =>
         dbContext.TodoLists.AsNoTracking().AnyAsync(list => list.Id == listId);
 

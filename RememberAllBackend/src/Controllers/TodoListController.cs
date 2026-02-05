@@ -32,6 +32,17 @@ public class TodoListController(ITodoListService todoListService) : ControllerBa
         return Ok(todoLists);
     }
 
+    [HttpGet("{listId}/refresh")]
+    public async Task<ActionResult<TodoListDto>> RefreshTodoList(Guid listId, [FromQuery] DateTime currentUpdatedAt)
+    {
+        var refreshedTodoListDto = await todoListService.RefreshTodoListAsync(listId, currentUpdatedAt);
+
+        if (refreshedTodoListDto == null)
+            return NoContent();
+
+        return Ok(refreshedTodoListDto);
+    }
+
     [HttpDelete("{listId}")]
     public async Task<IActionResult> DeleteTodoList(Guid listId)
     {

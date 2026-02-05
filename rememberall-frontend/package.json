@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"generate-icons": "node generate-icons.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.1",
@@ -28,6 +29,7 @@
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
+		"sharp": "^0.34.5",
 		"svelte": "^5.48.2",
 		"svelte-check": "^4.3.5",
 		"tailwindcss": "^4.1.18",

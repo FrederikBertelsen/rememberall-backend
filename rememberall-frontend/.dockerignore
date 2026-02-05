@@ -1,0 +1,15 @@
+.git
+.gitignore
+node_modules
+npm-debug.log
+.env
+.env.local
+.svelte-kit
+build
+dist
+.vscode
+.DS_Store
+*.swp
+*.swo
+*~
+CoverageReport

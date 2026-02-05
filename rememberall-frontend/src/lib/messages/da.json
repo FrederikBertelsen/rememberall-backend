@@ -1,0 +1,160 @@
+{
+  "common": {
+    "signInToAccount": "Log ind på din konto",
+    "createAccount": "Opret konto",
+    "email": "Email",
+    "password": "Adgangskode",
+    "fullName": "Fulde navn",
+    "confirmPassword": "Bekræft adgangskode",
+    "signIn": "Log ind",
+    "signingIn": "Logger ind...",
+    "signUp": "Opret konto",
+    "signUpButton": "Opret konto",
+    "signingUp": "Opretter...",
+    "createButton": "Opret",
+    "creating": "Opretter...",
+    "cancel": "Annuller",
+    "logout": "Log ud",
+    "loggingOut": "Logger ud...",
+    "menu": "Menu"
+  },
+  "mobileOnly": {
+    "title": "Kun mobil",
+    "description": "Denne app er udelukkende designet til mobile enheder.",
+    "instruction": "Tilgå venligst denne applikation fra din smartphone eller tablet.",
+    "screenWidth": "Skærmbredde: {width}px (minimum 768px påkrævet)"
+  },
+  "form": {
+    "emailRequired": "Email og adgangskode er påkrævet",
+    "invalidEmail": "Indtast venligst en gyldig email",
+    "validEmailRequired": "Indtast venligst en gyldig emailadresse",
+    "allFieldsRequired": "Alle felter er påkrævet",
+    "passwordMinLength": "Adgangskoden skal være mindst 8 tegn",
+    "passwordsMismatch": "Adgangskoderne stemmer ikke overens",
+    "textRequired": "Elementtekst er påkrævet",
+    "textTooLong": "Elementtekst skal være mindre end 255 tegn",
+    "listNameRequired": "Listenavn er påkrævet",
+    "listNameTooLong": "Listenavn skal være mindre end 100 tegn",
+    "loginFailed": "Login mislykkedes. Prøv igen.",
+    "registrationFailed": "Registreringen mislykkedes. Prøv igen.",
+    "addItemFailed": "Kunne ikke tilføje element",
+    "createListFailed": "Kunne ikke oprette liste",
+    "sendInviteFailed": "Kunne ikke sende invitation",
+    "updateItemFailed": "Kunne ikke opdatere element",
+    "deleteItemFailed": "Kunne ikke slette element",
+    "deleteListFailed": "Kunne ikke slette liste",
+    "leaveListFailed": "Kunne ikke forlade liste",
+    "revokeAccessFailed": "Kunne ikke tilbagekalde adgang"
+  },
+  "placeholders": {
+    "email": "din@email.dk",
+    "password": "Skriv adgangskode her",
+    "name": "Dit navn",
+    "listName": "Liste navn",
+    "itemText": "Tilføj et nyt element...",
+    "userEmail": "bruger@eksempel.dk"
+  },
+  "buttons": {
+    "add": "Tilføj",
+    "adding": "Tilføjer...",
+    "accept": "Accepter",
+    "accepting": "Accepterer...",
+    "decline": "Afvis",
+    "declining": "Afviser...",
+    "revoke": "Tilbagekald",
+    "remove": "Fjern",
+    "sendInvite": "Send invitation",
+    "sending": "Sender...",
+    "share": "Del liste",
+    "newList": "+ Ny liste",
+    "edit": "Rediger",
+    "delete": "Slet",
+    "deleteList": "Slet liste",
+    "leaveList": "Forlad liste",
+    "confirmDelete": "Bekræft sletning",
+    "yes": "Ja",
+    "no": "Nej"
+  },
+  "dashboard": {
+    "invitations": "💌 Invitationer"
+  },
+  "invites": {
+    "invitedYouTo": "inviterede dig til",
+    "youInvited": "Du inviterede",
+    "to": "til"
+  },
+  "lists": {
+    "noLists": "Ingen lister endnu. Opret din første liste!",
+    "myLists": "Mine lister",
+    "sharedWithMe": "Delt med mig",
+    "createNewList": "Opret ny liste",
+    "shareThisList": "Del denne liste"
+  },
+  "items": {
+    "characters": "tegn",
+    "reuseCompletedItem": "✓ Vil genbruge gennemført element",
+    "noItems": "Ingen elementer endnu. Tilføj dit første element!",
+    "completed": "Gennemført",
+    "pending": "Afventer"
+  },
+  "access": {
+    "owner": "Ejer",
+    "editor": "Redaktør",
+    "viewer": "Fremviser",
+    "noAccess": "Ingen har adgang til denne liste endnu",
+    "hasAccess": "Har adgang til denne liste",
+    "revokeAccess": "Tilbagekald adgang"
+  },
+  "hints": {
+    "minPassword": "Mindst 8 tegn"
+  },
+  "auth": {
+    "dontHaveAccount": "Har du ikke en konto?",
+    "alreadyHaveAccount": "Har du allerede en konto?",
+    "currentLanguage": "Nuværende sprog"
+  },
+  "pages": {
+    "dashboard": {
+      "yourLists": "Mine lister",
+      "sharedWithYou": "Delt med mig",
+      "loadingLists": "Indlæser lister...",
+      "noListsYet": "Ingen lister endnu",
+      "createFirstList": "Opret din første liste ovenfor",
+      "noSharedLists": "Ingen delte lister",
+      "acceptInvite": "Accepter en invitation for at samarbejde"
+    },
+    "listDetail": {
+      "loadingList": "Indlæser liste...",
+      "back": "Tilbage",
+      "sharedWith": "Delt med",
+      "youHaveAccess": "Du har adgang",
+      "viewWhoHasAccess": "Se hvem der har adgang",
+      "shareList": "Del liste",
+      "deleteList": "Slet liste",
+      "leave": "Forlad",
+      "leaveList": "Forlad liste",
+      "leaveConfirmTitle": "Forlad liste",
+      "leaveConfirmMessage": "Du vil miste adgang til denne liste.",
+      "notSharedYet": "Ikke delt med nogen endnu.",
+      "sharedWith_text": "Delt med",
+      "close": "Luk",
+      "deleteConfirmTitle": "Slet liste",
+      "deleteConfirmMessage": "Dette vil permanent slette listen og alle dens elementer.",
+      "editItem": "Rediger element",
+      "itemText": "Elementtekst",
+      "characterCount": "tegn",
+      "save": "Gem",
+      "deleteItem": "Slet",
+      "noItemsYet": "Ingen elementer endnu",
+      "addItemUsingButton": "Tilføj et element ved hjælp af + knappen"
+    }
+  },
+  "modals": {
+    "addItem": "Tilføj element",
+    "done": "Færdig",
+    "cancel": "Annuller",
+    "save": "Gem",
+    "delete": "Slet",
+    "close": "Luk"
+  }
+}

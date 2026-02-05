@@ -56,6 +56,26 @@ public class TodoListService(
         return todoLists.ToDtos();
     }
 
+    public async Task<TodoListDto?> RefreshTodoListAsync(Guid listId, DateTime currentUpdatedAt)
+    {
+        var userId = currentUserService.GetUserId();
+
+        if (!await listAccessRepository.UserHasAccessToListAsync(userId, listId))
+            throw new ForbiddenException("User does not have access to this list.");
+
+        var updatedAt = await todoListRepository.GetTodoListUpdatedAtAsync(listId);
+
+        if (updatedAt <= currentUpdatedAt)
+            return null;
+
+        Console.WriteLine($"UpdatedAt: {updatedAt}, CurrentUpdatedAt: {currentUpdatedAt}");
+
+        var list = await todoListRepository.GetTodoListByIdAsync(listId)
+            ?? throw new NotFoundException("List", "Id", listId);
+
+        return list.ToDto();
+    }
+
     public async Task<TodoListDto> UpdateTodoListAsync(UpdateTodoListDto updateTodoListDto)
     {
         TodoList todoList = await todoListRepository.GetTodoListByIdAsync(updateTodoListDto.Id)

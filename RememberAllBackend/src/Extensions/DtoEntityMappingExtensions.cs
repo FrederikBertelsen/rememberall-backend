@@ -54,6 +54,7 @@ public static class EntityDtoMappingExtensions
             Id: todoList.Id,
             OwnerId: todoList.OwnerId,
             Name: todoList.Name,
+            UpdatedAt: todoList.UpdatedAt,
             Items: todoList.Items.Select(item => item.ToDto()).ToList()
         );
     }

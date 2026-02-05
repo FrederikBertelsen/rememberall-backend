@@ -1,0 +1,160 @@
+{
+  "common": {
+    "signInToAccount": "Sign in to your account",
+    "createAccount": "Create your account",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "signUp": "Sign up",
+    "signUpButton": "Sign up",
+    "signingUp": "Signing up...",
+    "createButton": "Create",
+    "creating": "Creating...",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "menu": "Menu"
+  },
+  "mobileOnly": {
+    "title": "Mobile Only",
+    "description": "This app is designed exclusively for mobile devices.",
+    "instruction": "Please access this application from your smartphone or tablet.",
+    "screenWidth": "Screen width: {width}px (minimum 768px required)"
+  },
+  "form": {
+    "emailRequired": "Email and password are required",
+    "invalidEmail": "Please enter a valid email",
+    "validEmailRequired": "Please enter a valid email address",
+    "allFieldsRequired": "All fields are required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordsMismatch": "Passwords do not match",
+    "textRequired": "Item text is required",
+    "textTooLong": "Item text must be less than 255 characters",
+    "listNameRequired": "List name is required",
+    "listNameTooLong": "List name must be less than 100 characters",
+    "loginFailed": "Login failed. Please try again.",
+    "registrationFailed": "Registration failed. Please try again.",
+    "addItemFailed": "Failed to add item",
+    "createListFailed": "Failed to create list",
+    "sendInviteFailed": "Failed to send invite",
+    "updateItemFailed": "Failed to update item",
+    "deleteItemFailed": "Failed to delete item",
+    "deleteListFailed": "Failed to delete list",
+    "leaveListFailed": "Failed to leave list",
+    "revokeAccessFailed": "Failed to revoke access"
+  },
+  "placeholders": {
+    "email": "your@email.com",
+    "password": "Enter Password Here",
+    "name": "Your Name",
+    "listName": "List name",
+    "itemText": "Add a new item...",
+    "userEmail": "user@example.com"
+  },
+  "buttons": {
+    "add": "Add",
+    "adding": "Adding...",
+    "accept": "Accept",
+    "accepting": "Accepting...",
+    "decline": "Decline",
+    "declining": "Declining...",
+    "revoke": "Revoke",
+    "remove": "Remove",
+    "sendInvite": "Send Invite",
+    "sending": "Sending...",
+    "share": "Share List",
+    "newList": "+ New List",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteList": "Delete List",
+    "leaveList": "Leave List",
+    "confirmDelete": "Confirm Delete",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "dashboard": {
+    "invitations": "💌 Invitations"
+  },
+  "invites": {
+    "invitedYouTo": "invited you to",
+    "youInvited": "Invited",
+    "to": "to"
+  },
+  "lists": {
+    "noLists": "No lists yet. Create your first list!",
+    "myLists": "My Lists",
+    "sharedWithMe": "Shared with Me",
+    "createNewList": "Create New List",
+    "shareThisList": "Share This List"
+  },
+  "items": {
+    "characters": "characters",
+    "reuseCompletedItem": "✓ Will reuse completed item",
+    "noItems": "No items yet. Add your first item!",
+    "completed": "Completed",
+    "pending": "Pending"
+  },
+  "access": {
+    "owner": "Owner",
+    "editor": "Editor",
+    "viewer": "Viewer",
+    "noAccess": "No one has access to this list yet",
+    "hasAccess": "Has access to this list",
+    "revokeAccess": "Revoke access"
+  },
+  "hints": {
+    "minPassword": "At least 8 characters"
+  },
+  "auth": {
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "currentLanguage": "Current language"
+  },
+  "pages": {
+    "dashboard": {
+      "yourLists": "Your Lists",
+      "sharedWithYou": "Shared With You",
+      "loadingLists": "Loading lists...",
+      "noListsYet": "No lists yet",
+      "createFirstList": "Create your first list above",
+      "noSharedLists": "No shared lists",
+      "acceptInvite": "Accept an invite to collaborate"
+    },
+    "listDetail": {
+      "loadingList": "Loading list...",
+      "back": "Back",
+      "sharedWith": "Shared with",
+      "youHaveAccess": "You have access",
+      "viewWhoHasAccess": "View who has access",
+      "shareList": "Share list",
+      "deleteList": "Delete list",
+      "leave": "Leave",
+      "leaveList": "Leave",
+      "leaveConfirmTitle": "Leave",
+      "leaveConfirmMessage": "You will lose access to this list.",
+      "notSharedYet": "Not shared with anyone yet.",
+      "sharedWith_text": "Shared With",
+      "close": "Close",
+      "deleteConfirmTitle": "Delete",
+      "deleteConfirmMessage": "This will permanently delete the list and all its items.",
+      "editItem": "Edit Item",
+      "itemText": "Item text",
+      "characterCount": "characters",
+      "save": "Save",
+      "deleteItem": "Delete",
+      "noItemsYet": "No items yet",
+      "addItemUsingButton": "Add an item using the + button"
+    }
+  },
+  "modals": {
+    "addItem": "Add Item",
+    "done": "Done",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "close": "Close"
+  }
+}

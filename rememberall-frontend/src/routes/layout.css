@@ -1,1 +1,162 @@
 @import 'tailwindcss';
+
+:root {
+	/* Background colors */
+	--color-bg-primary: rgb(9, 9, 11);
+	--color-bg-secondary: rgb(18, 18, 21);
+	/* Text colors */
+	--color-text-primary: rgb(255, 255, 255);
+	--color-text-secondary: rgb(163, 163, 163);
+	--color-text-muted: rgb(107, 114, 128);
+	/* Accent colors */
+	--color-accent: rgb(20, 184, 166);
+	--color-accent-hover: rgb(45, 212, 191);
+	/* Status colors */
+	--color-danger: rgb(239, 68, 68);
+	--color-success: rgb(34, 197, 94);
+	/* Border */
+	--color-border: rgb(39, 39, 42);
+	/* Special */
+	--color-error-light: rgba(239, 68, 68, 0.1);
+	--color-success-light: rgba(34, 197, 94, 0.1);
+	--color-overlay-dark: rgba(0, 0, 0, 0.85);
+}
+
+:global(body) {
+	margin: 0;
+	padding: 0;
+	background-color: var(--color-bg-primary);
+	color: var(--color-text-primary);
+	word-break: break-word;
+}
+
+/* Layout Containers */
+.page-container {
+	@apply flex min-h-screen flex-col items-center justify-center gap-8 px-4 py-12;
+	background-color: var(--color-bg-primary);
+}
+
+.page-container-scroll {
+	@apply min-h-[calc(100vh-4rem)] px-4 py-6;
+	background-color: var(--color-bg-primary);
+	color: var(--color-text-primary);
+}
+
+/* Card & Content Containers */
+.card {
+	@apply w-full max-w-md space-y-8;
+}
+
+.card-section {
+	@apply space-y-6;
+}
+
+/* Headings */
+.page-heading {
+	@apply text-center;
+}
+
+.page-heading h1,
+.page-heading h2 {
+	@apply mb-0 text-3xl font-bold;
+	color: var(--color-text-primary);
+}
+
+.page-heading p {
+	@apply mt-2;
+	color: var(--color-text-secondary);
+}
+
+/* Forms */
+.form {
+	@apply space-y-6;
+}
+
+.form-group {
+	@apply space-y-2;
+}
+
+.form-label {
+	@apply block text-sm font-medium;
+	color: var(--color-text-primary);
+}
+
+.form-input {
+	@apply min-h-10 w-full rounded border px-3 py-2 focus:outline-none disabled:opacity-50;
+	background-color: var(--color-bg-secondary);
+	border-color: var(--color-border);
+	color: var(--color-text-primary);
+}
+
+.form-input::placeholder {
+	color: var(--color-text-muted);
+}
+
+.form-input:focus {
+	border-color: var(--color-accent);
+}
+
+.form-input:disabled {
+	cursor: not-allowed;
+}
+
+.form-hint {
+	@apply mt-1 text-xs;
+	color: var(--color-text-muted);
+}
+
+/* Alerts & Messages */
+.alert {
+	@apply rounded border p-4;
+	background-color: var(--color-error-light);
+	border-color: var(--color-danger);
+}
+
+.alert p {
+	@apply m-0 text-sm;
+	color: var(--color-danger);
+}
+
+.alert-success {
+	background-color: var(--color-success-light);
+	border-color: var(--color-success);
+}
+
+.alert-success p {
+	color: var(--color-success);
+}
+
+/* Buttons */
+.btn {
+	@apply min-h-10 w-full rounded px-4 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-primary {
+	background-color: var(--color-accent);
+	color: var(--color-text-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+	background-color: var(--color-accent-hover);
+}
+
+.btn-secondary {
+	background-color: transparent;
+	color: var(--color-text-primary);
+	border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+	background-color: var(--color-bg-secondary);
+}
+
+/* Footer & Links */
+.page-footer {
+	@apply text-center text-sm;
+	color: var(--color-text-secondary);
+}
+
+.page-footer a {
+	@apply font-medium;
+	color: rgb(59, 130, 246);
+}

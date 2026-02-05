@@ -77,4 +77,54 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(listAccess => listAccess.ListId)
             .OnDelete(DeleteBehavior.Cascade);
     }
+
+
+    // Override SaveChangesAsync to update UpdatedAt on TodoLists
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.Entity is TodoList ||
+                        e.Entity is TodoItem ||
+                        e.Entity is ListAccess ||
+                        e.Entity is Invite)
+            .ToList();
+
+        var todoListIds = new HashSet<Guid>();
+
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is TodoList todoList)
+                todoListIds.Add(todoList.Id);
+            else if (entry.Entity is TodoItem item)
+                todoListIds.Add(item.TodoListId);
+            else if (entry.Entity is ListAccess access)
+                todoListIds.Add(access.ListId);
+            else if (entry.Entity is Invite invite)
+                todoListIds.Add(invite.ListId);
+        }
+
+        foreach (var listId in todoListIds)
+        {
+            // Check if already tracked
+            var trackedList = ChangeTracker.Entries<TodoList>()
+                .FirstOrDefault(e => e.Entity.Id == listId);
+
+            if (trackedList != null)
+            {
+                trackedList.Entity.UpdatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                // If not tracked, query and attach it
+                var list = await TodoLists.FirstOrDefaultAsync(l => l.Id == listId, cancellationToken);
+                if (list != null)
+                {
+                    list.UpdatedAt = DateTime.UtcNow;
+                    Update(list);
+                }
+            }
+        }
+
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 }

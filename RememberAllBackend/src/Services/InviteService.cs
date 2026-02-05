@@ -32,6 +32,9 @@ public class InviteService(
         var inviteReciever = await userRepository.GetUserByEmailAsync(createInviteDto.InviteRecieverEmail)
             ?? throw new NotFoundException("User", "Email", createInviteDto.InviteRecieverEmail);
 
+        if (inviteReciever.Id == currentUserId)
+            throw new InvalidOperationException("User cannot invite themselves.");
+
         Invite newInvite = createInviteDto.ToEntity(currentUserId, inviteReciever.Id);
         newInvite = await inviteRepository.CreateInviteAsync(newInvite);
 
