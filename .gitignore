@@ -461,3 +461,4 @@ app.db-shm
 app.db-wal
 CoverageReport
 rememberall-frontend/.vscode
+.env
