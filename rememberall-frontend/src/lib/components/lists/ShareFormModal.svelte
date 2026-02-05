@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { languageTag, tSync } from '$lib/i18n/index';
+	import { createViewportState, calculateModalPosition } from '$lib/utils/viewport.svelte';
 	import AccessRow from './AccessRow.svelte';
 	import type { CreateInviteDto, ListAccessDto } from '$lib/api/types';
 
@@ -25,6 +26,8 @@
 	let error = $state<string | null>(null);
 	let inputRef = $state<HTMLInputElement | null>(null);
 	let lang = $derived($languageTag);
+	let viewportState = createViewportState();
+	let modalTopPercent = $derived(calculateModalPosition(viewportState, 400).topPercent);
 
 	function closeModal(): void {
 		show = false;
@@ -76,8 +79,11 @@
 		aria-label="Close modal"
 	></div>
 
-	<!-- Modal Content - positioned at 25% from top -->
-	<div class="pointer-events-none fixed top-1/4 right-0 left-0 z-50 flex justify-center px-4">
+	<!-- Modal Content - positioned to avoid keyboard -->
+	<div
+		class="pointer-events-none fixed right-0 left-0 z-50 flex justify-center px-4"
+		style="top: {modalTopPercent}%"
+	>
 		<div
 			class="pointer-events-auto max-h-[70vh] w-full max-w-sm overflow-y-auto rounded-lg border p-4"
 			style="background-color: var(--color-bg-secondary); border-color: var(--color-border);"

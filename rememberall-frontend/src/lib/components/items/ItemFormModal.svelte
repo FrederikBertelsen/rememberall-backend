@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ItemForm from './ItemForm.svelte';
 	import { languageTag, tSync } from '$lib/i18n/index';
+	import { createViewportState, calculateModalPosition } from '$lib/utils/viewport.svelte';
 
 	interface Props {
 		show?: boolean;
@@ -9,6 +10,9 @@
 	}
 
 	let { show = $bindable(false), listId, isLoading = false }: Props = $props();
+
+	let viewportState = createViewportState();
+	let modalTopPercent = $derived(calculateModalPosition(viewportState, 300).topPercent);
 
 	function closeModal(): void {
 		show = false;
@@ -29,8 +33,11 @@
 		aria-label="Close modal"
 	></div>
 
-	<!-- Modal Content - positioned at 25% from top -->
-	<div class="pointer-events-none fixed top-1/4 right-0 left-0 z-50 flex justify-center px-4">
+	<!-- Modal Content - positioned to avoid keyboard -->
+	<div
+		class="pointer-events-none fixed right-0 left-0 z-50 flex justify-center px-4"
+		style="top: {modalTopPercent}%"
+	>
 		<div
 			class="pointer-events-auto w-full max-w-sm space-y-4 rounded-lg border p-4"
 			style="background-color: var(--color-bg-secondary); border-color: var(--color-border);"

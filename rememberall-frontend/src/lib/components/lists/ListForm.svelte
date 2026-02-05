@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { languageTag, tSync } from '$lib/i18n/index';
+	import { createViewportState, calculateModalPosition } from '$lib/utils/viewport.svelte';
 	import type { CreateTodoListDto } from '$lib/api/types';
 
 	interface Props {
@@ -13,6 +14,8 @@
 	let name = $state<string>('');
 	let error = $state<string | null>(null);
 	let inputRef = $state<HTMLInputElement | null>(null);
+	let viewportState = createViewportState();
+	let modalTopPercent = $derived(calculateModalPosition(viewportState, 300).topPercent);
 
 	function openModal(): void {
 		showModal = true;
@@ -73,8 +76,11 @@
 		aria-label="Close modal"
 	></div>
 
-	<!-- Modal Content - positioned at 25% from top -->
-	<div class="pointer-events-none fixed top-1/4 right-0 left-0 z-50 flex justify-center px-4">
+	<!-- Modal Content - positioned to avoid keyboard -->
+	<div
+		class="pointer-events-none fixed right-0 left-0 z-50 flex justify-center px-4"
+		style="top: {modalTopPercent}%"
+	>
 		<form
 			onsubmit={handleSubmit}
 			class="pointer-events-auto w-full max-w-sm space-y-4 rounded-lg border p-4"
