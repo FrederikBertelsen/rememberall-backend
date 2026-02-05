@@ -4,6 +4,7 @@
 	import { languageTag, tSync } from '$lib/i18n/index';
 	import Logo from './Logo.svelte';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
+	import PWAInstallButton from './PWAInstallButton.svelte';
 
 	interface Props {
 		isAuthenticated?: boolean;
@@ -77,6 +78,10 @@
 
 				<div class="border-b px-4 py-3" style:border-bottom-color="var(--color-border)">
 					<LanguageSwitcher variant="vertical" />
+				</div>
+
+				<div class="border-b px-4 py-3" style:border-bottom-color="var(--color-border)">
+					<PWAInstallButton hideWhenInstalled={false} />
 				</div>
 
 				<button

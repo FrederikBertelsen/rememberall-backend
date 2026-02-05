@@ -73,7 +73,11 @@
     "leaveList": "Leave List",
     "confirmDelete": "Confirm Delete",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "installApp": "Install App",
+    "installing": "Installing...",
+    "appInstalled": "App Installed",
+    "installUnavailable": "Install Unavailable"
   },
   "dashboard": {
     "invitations": "💌 Invitations"

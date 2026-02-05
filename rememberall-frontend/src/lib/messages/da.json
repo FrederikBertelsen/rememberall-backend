@@ -73,7 +73,11 @@
     "leaveList": "Forlad liste",
     "confirmDelete": "Bekræft sletning",
     "yes": "Ja",
-    "no": "Nej"
+    "no": "Nej",
+    "installApp": "Installér app",
+    "installing": "Installerer...",
+    "appInstalled": "App installeret",
+    "installUnavailable": "Installation ikke tilgængelig"
   },
   "dashboard": {
     "invitations": "💌 Invitationer"
