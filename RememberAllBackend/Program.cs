@@ -41,6 +41,9 @@ public partial class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        // Health checks
+        builder.Services.AddHealthChecks();
+
         builder.Services.AddControllers();
 
 
@@ -105,6 +108,7 @@ public partial class Program
 
         app.UseAuthorization();
 
+        app.MapHealthChecks("/api/health");
         app.MapControllers();
 
         // Ensure database exist and apply any pending migrations on startup
