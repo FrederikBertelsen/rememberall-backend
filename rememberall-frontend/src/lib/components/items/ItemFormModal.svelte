@@ -57,7 +57,7 @@
 				</button>
 			</div>
 
-			<ItemForm {listId} {isLoading} />
+			<ItemForm {listId} {isLoading} autoFocus={show} />
 
 			<button
 				type="button"

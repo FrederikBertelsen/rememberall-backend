@@ -6,9 +6,10 @@
 	interface Props {
 		listId: string;
 		isLoading?: boolean;
+		autoFocus?: boolean;
 	}
 
-	let { listId, isLoading = false }: Props = $props();
+	let { listId, isLoading = false, autoFocus = false }: Props = $props();
 
 	let text = $state<string>('');
 	let error = $state<string | null>(null);
@@ -36,6 +37,13 @@
 			showSuggestions = false;
 		} else {
 			showSuggestions = true;
+		}
+	});
+
+	// Auto-focus input when form should be focused
+	$effect(() => {
+		if (autoFocus && inputRef) {
+			inputRef.focus();
 		}
 	});
 
