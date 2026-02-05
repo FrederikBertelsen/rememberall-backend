@@ -7,7 +7,7 @@
 
 import type { RequestHandler } from '@sveltejs/kit';
 
-const BACKEND_URL = 'http://localhost:5000/api';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000/api';
 
 /**
  * Forward GET requests to backend
