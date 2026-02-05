@@ -58,6 +58,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip navigation requests (HTML page loads) - let them bypass the service worker
+  // This prevents issues with auth redirects
+  if (event.request.mode === 'navigate') {
+    return;
+  }
+
   // Skip requests to API routes - always go to network with redirect handling
   if (event.request.url.includes('/api/')) {
     event.respondWith(
