@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { languageTag, tSync } from '$lib/i18n/index';
+	import { Smartphone, Hourglass, SquareCheckBig } from 'lucide-svelte';
 
 	interface Props {
 		text?: string;
@@ -82,19 +83,23 @@
 	<button
 		onclick={handleInstallClick}
 		disabled={isDisabled}
-		class="btn btn-primary"
+		class="btn btn-primary flex items-center justify-center gap-2"
 		style={isDisabled && !isAlreadyInstalled
 			? `background-color: var(--color-text-muted); cursor: not-allowed;`
 			: ''}
 	>
 		{#if isAlreadyInstalled && !hideWhenInstalled}
-			✅ {tSync(lang, 'buttons.appInstalled')}
+			<SquareCheckBig size={20} style="color: var(--color-text-primary);" />
+			<span>{tSync(lang, 'buttons.appInstalled')}</span>
 		{:else if isInstalling}
-			⏳ {tSync(lang, 'buttons.installing')}
+			<Hourglass size={20} style="color: var(--color-text-primary);" />
+			<span>{tSync(lang, 'buttons.installing')}</span>
 		{:else if !isPWASupported}
-			📱 {tSync(lang, 'buttons.installUnavailable')}
+			<Smartphone size={20} style="color: var(--color-text-primary);" />
+			<span>{tSync(lang, 'buttons.installUnavailable')}</span>
 		{:else}
-			📱 {tSync(lang, text)}
+			<Smartphone size={20} style="color: var(--color-text-primary);" />
+			<span>{tSync(lang, text)}</span>
 		{/if}
 	</button>
 {/if}

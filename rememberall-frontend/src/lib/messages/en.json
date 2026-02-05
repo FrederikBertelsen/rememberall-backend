@@ -151,6 +151,20 @@
       "deleteItem": "Delete",
       "noItemsYet": "No items yet",
       "addItemUsingButton": "Add an item using the + button"
+    },
+    "settings": {
+      "title": "Settings",
+      "back": "Back",
+      "profile": "Profile",
+      "userName": "Name",
+      "userEmail": "Email",
+      "preferences": "Preferences",
+      "language": "Language",
+      "appSettings": "App",
+      "installApp": "Install App",
+      "version": "Version",
+      "logout": "Logout",
+      "logoutConfirm": "Are you sure you want to logout?"
     }
   },
   "modals": {

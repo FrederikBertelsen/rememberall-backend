@@ -151,6 +151,20 @@
       "deleteItem": "Slet",
       "noItemsYet": "Ingen elementer endnu",
       "addItemUsingButton": "Tilføj et element ved hjælp af + knappen"
+    },
+    "settings": {
+      "title": "Indstillinger",
+      "back": "Tilbage",
+      "profile": "Profil",
+      "userName": "Navn",
+      "userEmail": "Email",
+      "preferences": "Præferencer",
+      "language": "Sprog",
+      "appSettings": "App",
+      "installApp": "Installér app",
+      "version": "Version",
+      "logout": "Log ud",
+      "logoutConfirm": "Er du sikker på, at du vil logge ud?"
     }
   },
   "modals": {

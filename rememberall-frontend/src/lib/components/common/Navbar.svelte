@@ -1,34 +1,22 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { languageTag, tSync } from '$lib/i18n/index';
 	import Logo from './Logo.svelte';
-	import LanguageSwitcher from './LanguageSwitcher.svelte';
-	import PWAInstallButton from './PWAInstallButton.svelte';
+	import { Settings } from 'lucide-svelte';
 
 	interface Props {
 		isAuthenticated?: boolean;
 	}
 
 	let { isAuthenticated = false }: Props = $props();
-	let menuOpen = $state(false);
 
-	async function handleLogout(): Promise<void> {
-		try {
-			await authStore.logout();
-			await goto('/login');
-		} catch {
-			// Error already handled in store
-		}
+	async function goToSettings(): Promise<void> {
+		await goto('/settings');
 	}
 
-	function toggleMenu(): void {
-		menuOpen = !menuOpen;
-	}
-
-	function closeMenu(): void {
-		menuOpen = false;
-	}
+	const isHomePage = $derived($page.url.pathname === '/');
+	let lang = $derived($languageTag);
 </script>
 
 <nav
@@ -37,68 +25,16 @@
 >
 	<a href="/" class="inline-block"><Logo size="md" outline={false} /></a>
 
-	{#if isAuthenticated}
+	{#if isAuthenticated && isHomePage}
 		<button
-			onclick={toggleMenu}
-			class="p-2 text-2xl leading-none"
+			onclick={goToSettings}
+			class="flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
 			style="color: var(--color-text-primary);"
-			aria-label={tSync($languageTag, 'common.menu')}
+			aria-label={tSync(lang, 'pages.settings.title')}
+			title={tSync(lang, 'pages.settings.title')}
 		>
-			☰
+			<Settings size={24} />
 		</button>
-
-		{#if menuOpen}
-			<!-- Menu Overlay -->
-			<div
-				style="background-color: var(--color-overlay-dark);"
-				class="fixed inset-0 z-40"
-				role="button"
-				tabindex="0"
-				onclick={closeMenu}
-				onkeydown={(e) => {
-					if (e.key === 'Escape') closeMenu();
-				}}
-				aria-label="Close menu"
-			></div>
-
-			<!-- Menu Dropdown -->
-			<div
-				style="background-color: var(--color-bg-secondary); border-color: var(--color-border);"
-				class="absolute top-16 right-0 z-40 w-48 border border-t-0"
-			>
-				{#if authStore.currentUser}
-					<div
-						style="color: var(--color-text-secondary);"
-						class="border-b px-4 py-3 text-sm"
-						style:border-bottom-color="var(--color-border)"
-					>
-						{authStore.currentUser.name}
-					</div>
-				{/if}
-
-				<div class="border-b px-4 py-3" style:border-bottom-color="var(--color-border)">
-					<LanguageSwitcher variant="vertical" />
-				</div>
-
-				<div class="border-b px-4 py-3" style:border-bottom-color="var(--color-border)">
-					<PWAInstallButton hideWhenInstalled={false} />
-				</div>
-
-				<button
-					onclick={() => {
-						handleLogout();
-						closeMenu();
-					}}
-					disabled={authStore.isLoading}
-					class="w-full border-t px-4 py-3 text-left text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
-					style="color: var(--color-danger); border-top-color: var(--color-border);"
-				>
-					{authStore.isLoading
-						? tSync($languageTag, 'common.loggingOut')
-						: tSync($languageTag, 'common.logout')}
-				</button>
-			</div>
-		{/if}
 	{/if}
 </nav>
 
