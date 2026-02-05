@@ -141,13 +141,13 @@
 			<div class="mb-4 flex items-center justify-between gap-4">
 				<a
 					href="/"
-					class="inline-flex items-center gap-2 text-sm font-medium"
+					class="text-md inline-flex items-center gap-2 font-medium"
 					style="color: var(--color-accent);"
 				>
 					<ArrowLeft size={20} />
 					<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
 				</a>
-				<div class="flex shrink-0 gap-2">
+				<div class="flex shrink-0 gap-4">
 					{#if isOwner}
 						<button
 							onclick={() => (showShareForm = true)}
@@ -180,19 +180,6 @@
 			</div>
 
 			<h1 class="mb-1 text-3xl font-bold">{list.name}</h1>
-			<div class="flex flex-wrap items-center gap-2">
-				{#if isOwner && access.length > 0}
-					<button
-						onclick={() => (showAccessModal = true)}
-						class="rounded px-2 py-1 text-xs"
-						style="background-color: rgba(20, 184, 166, 0.15); color: var(--color-accent);"
-						title={tSync($languageTag, 'pages.listDetail.viewWhoHasAccess')}
-					>
-						👥 {tSync($languageTag, 'pages.listDetail.sharedWith')}
-						{access.length}
-					</button>
-				{/if}
-			</div>
 		</div>
 
 		{#if showLeaveListConfirm}
@@ -382,7 +369,14 @@
 			</div>
 		{/if}
 
-		<ShareFormModal bind:show={showShareForm} {listId} onSubmit={handleShareList} />
+		<ShareFormModal
+			bind:show={showShareForm}
+			{listId}
+			{access}
+			isLoading={invitesStore.isLoading || accessStore.isLoading}
+			onSubmit={handleShareList}
+			onRevoke={handleRevokeAccess}
+		/>
 
 		<div class="space-y-8">
 			{#if uncompletedItems.length > 0}
@@ -431,12 +425,12 @@
 		<!-- Floating Add Button -->
 		<button
 			onclick={() => (showItemForm = true)}
-			class="fixed right-4 bottom-8 z-40 flex h-12 w-12 items-center justify-center rounded-lg disabled:cursor-not-allowed disabled:opacity-50"
+			class="fixed right-4 bottom-8 z-40 flex h-14 w-14 items-center justify-center rounded-lg disabled:cursor-not-allowed disabled:opacity-50"
 			style="background-color: var(--color-accent); color: var(--color-text-primary);"
 			title="Add item"
 			disabled={itemsStore.isLoading}
 		>
-			<Plus size={24} />
+			<Plus size={36} />
 		</button>
 
 		<!-- Item Form Modal -->
