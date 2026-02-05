@@ -74,8 +74,8 @@ self.addEventListener('fetch', (event) => {
         return response;
       }
 
-      return fetch(event.request).then((response) => {
-        // Don't cache non-successful responses
+      return fetch(event.request, { redirect: 'follow' }).then((response) => {
+        // Don't cache non-successful responses or redirects
         if (!response || response.status !== 200) {
           return response;
         }
@@ -87,6 +87,9 @@ self.addEventListener('fetch', (event) => {
         });
 
         return response;
+      }).catch(() => {
+        // Network error - return cached or error response
+        return caches.match(event.request) || new Response('Network error', { status: 408 });
       });
     })
   );
