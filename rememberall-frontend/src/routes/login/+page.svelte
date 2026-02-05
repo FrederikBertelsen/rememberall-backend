@@ -6,6 +6,7 @@
 	import Logo from '$lib/components/common/Logo.svelte';
 	import LanguageSwitcher from '$lib/components/common/LanguageSwitcher.svelte';
 	import PasswordInput from '$lib/components/common/PasswordInput.svelte';
+	import PWAInstallButton from '$lib/components/common/PWAInstallButton.svelte';
 
 	let email = $state('');
 	let password = $state('');
@@ -36,14 +37,14 @@
 	}
 </script>
 
-<div class="page-container">
-	<div class="card">
+<div class="flex min-h-screen flex-col items-center justify-start gap-8 px-4 pt-8">
+	<div class="card space-y-0">
 		<div class="page-heading">
-			<Logo size="md" />
+			<Logo size="lg" />
 			<p>{tSync($languageTag, 'common.signInToAccount')}</p>
 		</div>
 
-		<form onsubmit={handleSubmit} class="form">
+		<form onsubmit={handleSubmit} class="form mt-10">
 			{#if formError}
 				<div class="alert">
 					<p>{formError}</p>
@@ -84,5 +85,8 @@
 			</p>
 		</form>
 	</div>
-	<LanguageSwitcher />
+	<div class="flex flex-col items-center gap-6">
+		<LanguageSwitcher />
+		<PWAInstallButton hideWhenInstalled={true} hideWhenUnavailable={true} />
+	</div>
 </div>

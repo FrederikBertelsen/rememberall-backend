@@ -6,9 +6,14 @@
 	interface Props {
 		text?: string;
 		hideWhenInstalled?: boolean;
+		hideWhenUnavailable?: boolean;
 	}
 
-	const { text = 'buttons.installApp', hideWhenInstalled = true }: Props = $props();
+	const {
+		text = 'buttons.installApp',
+		hideWhenInstalled = true,
+		hideWhenUnavailable = false
+	}: Props = $props();
 
 	let deferredPrompt = $state<any>(null);
 	let showInstallButton = $state(true);
@@ -31,6 +36,10 @@
 		if ((window as any).deferredPrompt) {
 			deferredPrompt = (window as any).deferredPrompt;
 			isPWASupported = (window as any).isPWAInstallAvailable;
+		} else if (hideWhenUnavailable) {
+			// Hide button if installation not available and hideWhenUnavailable is true
+			showInstallButton = false;
+			return;
 		}
 
 		// Listen for app installed event

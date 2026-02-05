@@ -24,7 +24,7 @@
 	<!-- Back Button -->
 	<a
 		href="/"
-		class="mb-4 inline-flex items-center gap-2 text-sm font-medium"
+		class="text-md mb-4 inline-flex items-center gap-2 font-medium"
 		style="color: var(--color-accent);"
 	>
 		<ArrowLeft size={20} />

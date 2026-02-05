@@ -21,11 +21,11 @@
 	class:gap-1={variant === 'vertical'}
 >
 	<div
-		class="flex rounded-lg bg-gray-200 p-1"
+		class="flex rounded-lg p-1"
 		class:gap-1={variant === 'horizontal'}
 		class:flex-col={variant === 'vertical'}
 		class:w-full={variant === 'vertical'}
-		style="background-color: var(--color-bg-secondary);"
+		style="background-color: var(--color-bg-secondary); border: 1px solid var(--color-border);"
 	>
 		{#each languages as lang (lang.code)}
 			<button

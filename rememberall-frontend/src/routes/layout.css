@@ -4,6 +4,7 @@
 	/* Background colors */
 	--color-bg-primary: rgb(9, 9, 11);
 	--color-bg-secondary: rgb(18, 18, 21);
+	--color-bg-tertiary: rgb(57, 57, 63);
 	/* Text colors */
 	--color-text-primary: rgb(255, 255, 255);
 	--color-text-secondary: rgb(163, 163, 163);
@@ -15,7 +16,7 @@
 	--color-danger: rgb(239, 68, 68);
 	--color-success: rgb(34, 197, 94);
 	/* Border */
-	--color-border: rgb(39, 39, 42);
+	--color-border: rgb(80, 80, 90);
 	/* Special */
 	--color-error-light: rgba(239, 68, 68, 0.1);
 	--color-success-light: rgba(34, 197, 94, 0.1);
@@ -84,7 +85,7 @@
 
 .form-input {
 	@apply min-h-10 w-full rounded border px-3 py-2 focus:outline-none disabled:opacity-50;
-	background-color: var(--color-bg-secondary);
+	background-color: var(--color-bg-tertiary);
 	border-color: var(--color-border);
 	color: var(--color-text-primary);
 }

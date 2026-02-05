@@ -11,11 +11,13 @@
 
 	let { item, isLoading = false, isLast = false, onToggle, onLongPress }: Props = $props();
 	let longPressTimer: ReturnType<typeof setTimeout> | null = null;
+	let longPressDetected = $state(false);
 	let touchStartY = $state(0);
 	let touchStartX = $state(0);
 
 	function handleMouseDown() {
 		longPressTimer = setTimeout(() => {
+			longPressDetected = true;
 			onLongPress?.(item.id);
 		}, 500);
 	}
@@ -25,14 +27,18 @@
 			clearTimeout(longPressTimer);
 			longPressTimer = null;
 		}
+		longPressDetected = false;
 	}
 
 	function handleTouchStart(e: TouchEvent) {
+		e.preventDefault();
 		touchStartY = e.touches[0].clientY;
 		touchStartX = e.touches[0].clientX;
+		longPressDetected = false;
 		longPressTimer = setTimeout(() => {
+			longPressDetected = true;
 			onLongPress?.(item.id);
-		}, 750);
+		}, 500);
 	}
 
 	function handleTouchMove(e: TouchEvent) {
@@ -45,6 +51,7 @@
 		if ((moveY > 10 || moveX > 10) && longPressTimer) {
 			clearTimeout(longPressTimer);
 			longPressTimer = null;
+			longPressDetected = false;
 		}
 	}
 
@@ -60,10 +67,12 @@
 		const moveY = Math.abs(touchEndY - touchStartY);
 		const moveX = Math.abs(touchEndX - touchStartX);
 
-		// Only trigger toggle if movement is less than 10px (tap, not scroll)
-		if (moveY < 10 && moveX < 10) {
+		// Only trigger toggle if movement is less than 10px (tap, not scroll) and no long-press was detected
+		if (moveY < 10 && moveX < 10 && !longPressDetected) {
 			onToggle?.(item.id);
 		}
+
+		longPressDetected = false;
 	}
 </script>
 

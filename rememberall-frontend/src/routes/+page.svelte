@@ -6,6 +6,7 @@
 	import { languageTag, tSync } from '$lib/i18n/index';
 	import ListCard from '$lib/components/lists/ListCard.svelte';
 	import ListForm from '$lib/components/lists/ListForm.svelte';
+	import PWAInstallButton from '$lib/components/common/PWAInstallButton.svelte';
 	import type { CreateTodoListDto } from '$lib/api/types';
 
 	async function handleCreateList(data: CreateTodoListDto): Promise<void> {
@@ -66,6 +67,9 @@
 	<!-- Scrollable lists area -->
 	<div class="flex-1 overflow-y-auto px-4">
 		<div class="space-y-6 py-4">
+			<!-- Install App Banner -->
+			<PWAInstallButton hideWhenInstalled={true} hideWhenUnavailable={true} />
+
 			{#if hasInvites}
 				<div class="card-section">
 					<h2 class="mb-4 text-xl font-semibold" style="color: var(--color-text-primary);">

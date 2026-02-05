@@ -39,9 +39,9 @@
 		aria-label={showPassword ? 'Hide password' : 'Show password'}
 	>
 		{#if showPassword}
-			<EyeOff size={20} style="color: var(--color-text-muted);" />
+			<EyeOff size={20} style="color: var(--color-text-secondary);" />
 		{:else}
-			<Eye size={20} style="color: var(--color-text-muted);" />
+			<Eye size={20} style="color: var(--color-text-secondary);" />
 		{/if}
 	</button>
 </div>
