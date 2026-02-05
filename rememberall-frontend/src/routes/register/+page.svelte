@@ -5,6 +5,7 @@
 	import type { CreateUserDto } from '$lib/api/types';
 	import Logo from '$lib/components/common/Logo.svelte';
 	import LanguageSwitcher from '$lib/components/common/LanguageSwitcher.svelte';
+	import PasswordInput from '$lib/components/common/PasswordInput.svelte';
 
 	let name = $state('');
 	let email = $state('');
@@ -86,28 +87,22 @@
 			</div>
 
 			<div class="form-group">
-				<label for="password" class="form-label">{tSync($languageTag, 'common.password')}</label>
-				<input
+				<PasswordInput
 					id="password"
-					type="password"
 					bind:value={password}
 					disabled={authStore.isLoading}
-					class="form-input"
+					label={tSync($languageTag, 'common.password')}
 					placeholder={tSync($languageTag, 'placeholders.password')}
 				/>
 				<p class="form-hint">{tSync($languageTag, 'hints.minPassword')}</p>
 			</div>
 
 			<div class="form-group">
-				<label for="passwordConfirm" class="form-label"
-					>{tSync($languageTag, 'common.confirmPassword')}</label
-				>
-				<input
+				<PasswordInput
 					id="passwordConfirm"
-					type="password"
 					bind:value={passwordConfirm}
 					disabled={authStore.isLoading}
-					class="form-input"
+					label={tSync($languageTag, 'common.confirmPassword')}
 					placeholder={tSync($languageTag, 'placeholders.password')}
 				/>
 			</div>
