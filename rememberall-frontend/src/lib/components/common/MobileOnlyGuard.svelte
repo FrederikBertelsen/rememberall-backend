@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import type { Snippet } from 'svelte';
 	import { languageTag, tSync } from '$lib/i18n/index';
+	import LanguageSwitcher from './LanguageSwitcher.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -102,5 +103,6 @@
 				</div>
 			</div>
 		</div>
+		<LanguageSwitcher />
 	</div>
 {/if}
