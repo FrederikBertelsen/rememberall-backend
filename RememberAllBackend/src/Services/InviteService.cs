@@ -23,16 +23,16 @@ public class InviteService(
         if (!await userRepository.UserExistsByIdAsync(currentUserId))
             throw new NotFoundException("User", "Id", currentUserId);
 
-        if (!await userRepository.UserExistsByIdAsync(createInviteDto.InviteRecieverId))
-            throw new NotFoundException("User", "Id", createInviteDto.InviteRecieverId);
-
-        TodoList todoList = await todoListRepository.GetTodoListByIdAsync(createInviteDto.ListId)
-            ?? throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
-
-        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, todoList.Id))
+        if (!await listAccessRepository.UserHasAccessToListAsync(currentUserId, createInviteDto.ListId))
             throw new ForbiddenException("User does not have access to the specified TodoList.");
 
-        Invite newInvite = createInviteDto.ToEntity(currentUserId);
+        if (!await todoListRepository.TodoListExistsByIdAsync(createInviteDto.ListId))
+            throw new NotFoundException("TodoList", "Id", createInviteDto.ListId);
+
+        var inviteReciever = await userRepository.GetUserByEmailAsync(createInviteDto.InviteRecieverEmail)
+            ?? throw new NotFoundException("User", "Email", createInviteDto.InviteRecieverEmail);
+
+        Invite newInvite = createInviteDto.ToEntity(currentUserId, inviteReciever.Id);
         newInvite = await inviteRepository.CreateInviteAsync(newInvite);
 
         await inviteRepository.SaveChangesAsync();

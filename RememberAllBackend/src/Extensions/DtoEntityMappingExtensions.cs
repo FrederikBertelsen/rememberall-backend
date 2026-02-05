@@ -130,12 +130,12 @@ public static class EntityDtoMappingExtensions
     #endregion
 
     #region Invite Mappings
-    public static Invite ToEntity(this CreateInviteDto createInviteDto, Guid inviteSenderId)
+    public static Invite ToEntity(this CreateInviteDto createInviteDto, Guid inviteSenderId, Guid InviteReceiverId)
     {
         return new()
         {
             InviteSenderId = inviteSenderId,
-            InviteRecieverId = createInviteDto.InviteRecieverId,
+            InviteRecieverId = InviteReceiverId,
             ListId = createInviteDto.ListId,
         };
     }

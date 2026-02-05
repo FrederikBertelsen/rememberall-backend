@@ -36,6 +36,9 @@ public class TodoListRepository(AppDbContext dbContext) : ITodoListRepository
         return allLists;
     }
 
+    public Task<bool> TodoListExistsByIdAsync(Guid listId) =>
+        dbContext.TodoLists.AsNoTracking().AnyAsync(list => list.Id == listId);
+
     public TodoList UpdateTodoList(TodoList todoList) => dbContext.TodoLists.Update(todoList).Entity;
 
     public void DeleteTodoList(TodoList todoList) => dbContext.TodoLists.Remove(todoList);
