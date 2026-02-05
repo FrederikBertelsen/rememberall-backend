@@ -86,8 +86,8 @@
 <button
 	onclick={() => (showLogoutConfirm = true)}
 	disabled={authStore.isLoading}
-	class="fixed right-4 bottom-4 left-4 z-40 rounded-lg px-4 py-3 font-medium disabled:cursor-not-allowed disabled:opacity-50"
-	style="background-color: var(--color-danger); color: var(--color-text-primary);"
+	class="fixed right-4 bottom-4 left-4 z-40 rounded-lg border px-4 py-3 font-medium disabled:cursor-not-allowed disabled:opacity-50"
+	style="background-color: var(--color-danger); color: var(--color-text-primary); border-color: var(--color-error-light);"
 >
 	{authStore.isLoading ? tSync(lang, 'common.loggingOut') : tSync(lang, 'pages.settings.logout')}
 </button>

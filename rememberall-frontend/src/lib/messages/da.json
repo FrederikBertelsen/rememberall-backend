@@ -148,7 +148,10 @@
       "itemText": "Elementtekst",
       "characterCount": "tegn",
       "save": "Gem",
+      "saving": "Gemmer...",
       "deleteItem": "Slet",
+      "markDelete": "Slet",
+      "unmarkDelete": "Behold",
       "noItemsYet": "Ingen elementer endnu",
       "addItemUsingButton": "Tilføj et element ved hjælp af + knappen"
     },

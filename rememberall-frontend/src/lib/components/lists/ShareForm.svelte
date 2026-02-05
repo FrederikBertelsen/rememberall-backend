@@ -87,9 +87,20 @@
 			class="pointer-events-auto w-full max-w-sm space-y-4 rounded-lg border p-4"
 			style="background-color: var(--color-bg-secondary); border-color: var(--color-border);"
 		>
-			<h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">
-				{tSync($languageTag, 'lists.shareThisList')}
-			</h2>
+			<div class="flex items-center justify-between">
+				<h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">
+					{tSync($languageTag, 'lists.shareThisList')}
+				</h2>
+				<button
+					type="button"
+					onclick={closeModal}
+					class="text-2xl leading-none font-bold"
+					style="color: var(--color-text-secondary);"
+					aria-label="Close modal"
+				>
+					×
+				</button>
+			</div>
 
 			{#if error}
 				<div class="alert">

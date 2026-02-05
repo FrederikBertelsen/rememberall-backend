@@ -92,10 +92,9 @@
 	<button
 		onclick={handleInstallClick}
 		disabled={isDisabled}
-		class="btn btn-primary flex items-center justify-center gap-2"
-		style={isDisabled && !isAlreadyInstalled
-			? `background-color: var(--color-text-muted); cursor: not-allowed;`
-			: ''}
+		class="btn flex items-center justify-center gap-2"
+		class:btn-primary={!isDisabled}
+		class:btn-secondary={isDisabled}
 	>
 		{#if isAlreadyInstalled && !hideWhenInstalled}
 			<SquareCheckBig size={20} style="color: var(--color-text-primary);" />

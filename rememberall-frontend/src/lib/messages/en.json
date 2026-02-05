@@ -148,7 +148,10 @@
       "itemText": "Item text",
       "characterCount": "characters",
       "save": "Save",
+      "saving": "Saving...",
       "deleteItem": "Delete",
+      "markDelete": "Delete",
+      "unmarkDelete": "Keep",
       "noItemsYet": "No items yet",
       "addItemUsingButton": "Add an item using the + button"
     },

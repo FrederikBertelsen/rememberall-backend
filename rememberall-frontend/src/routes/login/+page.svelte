@@ -73,7 +73,7 @@
 				/>
 			</div>
 
-			<button type="submit" disabled={authStore.isLoading} class="btn btn-primary">
+			<button type="submit" disabled={authStore.isLoading} class="btn btn-accent">
 				{authStore.isLoading
 					? tSync($languageTag, 'common.signingIn')
 					: tSync($languageTag, 'common.signIn')}

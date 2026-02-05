@@ -27,8 +27,8 @@
 		<button
 			onclick={() => onRevoke?.(access.id)}
 			disabled={isLoading}
-			class="rounded px-3 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-			style="background-color: var(--color-error-light); color: var(--color-danger);"
+			class="rounded border px-3 py-1 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+			style="background-color: var(--color-danger); color: var(--color-error-light); border-color: var(--color-error-light);"
 			title={tSync(lang, 'access.revokeAccess')}
 		>
 			{tSync(lang, 'buttons.remove')}

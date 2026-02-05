@@ -49,7 +49,7 @@
 				<button
 					type="button"
 					onclick={closeModal}
-					class="text-lg leading-none font-bold"
+					class="text-2xl leading-none font-bold"
 					style="color: var(--color-text-secondary);"
 					aria-label="Close modal"
 				>

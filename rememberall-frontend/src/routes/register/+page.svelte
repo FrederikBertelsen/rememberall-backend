@@ -51,7 +51,7 @@
 <div class="page-container">
 	<div class="card">
 		<div class="page-heading">
-			<Logo size="md" />
+			<Logo size="lg" />
 			<p>{tSync($languageTag, 'common.createAccount')}</p>
 		</div>
 
@@ -107,7 +107,7 @@
 				/>
 			</div>
 
-			<button type="submit" disabled={authStore.isLoading} class="btn btn-primary">
+			<button type="submit" disabled={authStore.isLoading} class="btn btn-accent">
 				{authStore.isLoading
 					? tSync($languageTag, 'common.signingUp')
 					: tSync($languageTag, 'common.signUpButton')}
