@@ -94,13 +94,6 @@
 				<p class="text-sm" style="color: var(--color-text-secondary)">
 					{tSync($languageTag, 'mobileOnly.instruction')}
 				</p>
-
-				<div
-					class="rounded p-4 text-xs"
-					style="background-color: var(--color-bg-secondary); color: var(--color-text-muted)"
-				>
-					{tSync($languageTag, 'mobileOnly.screenWidth', { width: innerWidth })}
-				</div>
 			</div>
 		</div>
 		<LanguageSwitcher />
