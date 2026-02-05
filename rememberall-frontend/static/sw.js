@@ -53,19 +53,25 @@ self.addEventListener('activate', (event) => {
  * @param {FetchEvent} event
  */
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
   // Skip non-GET requests
   if (event.request.method !== 'GET') {
     return;
   }
 
-  // Skip navigation requests (HTML page loads) - let them bypass the service worker
-  // This prevents issues with auth redirects
+  // Skip all navigation requests - let browser handle them directly
   if (event.request.mode === 'navigate') {
     return;
   }
 
+  // Skip root path and HTML files - let browser handle navigation
+  if (url.pathname === '/' || url.pathname.endsWith('.html')) {
+    return;
+  }
+
   // Skip requests to API routes - always go to network with redirect handling
-  if (event.request.url.includes('/api/')) {
+  if (url.pathname.includes('/api/')) {
     event.respondWith(
       fetch(event.request, { redirect: 'follow' }).catch(() => {
         return new Response('Network error', { status: 408 });
@@ -74,6 +80,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Cache static assets (JS, CSS, fonts, images)
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
@@ -81,12 +88,12 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request, { redirect: 'follow' }).then((response) => {
-        // Don't cache non-successful responses or redirects
+        // Don't cache non-successful responses
         if (!response || response.status !== 200) {
           return response;
         }
 
-        // Clone the response
+        // Clone and cache the response
         const responseToCache = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
           cache.put(event.request, responseToCache);
@@ -94,8 +101,8 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       }).catch(() => {
-        // Network error - return cached or error response
-        return caches.match(event.request) || new Response('Network error', { status: 408 });
+        // Network error - return cached if available
+        return caches.match(event.request);
       });
     })
   );
