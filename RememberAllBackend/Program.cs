@@ -79,7 +79,13 @@ public partial class Program
         });
 
 
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
+        // Determine database path based on environment
+        var databasePath = builder.Environment.IsProduction() 
+            ? "/app/data/app.db"
+            : "app.db";
+        var connectionString = $"Data Source={databasePath}";
+
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
