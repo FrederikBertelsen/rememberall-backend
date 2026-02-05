@@ -26,17 +26,11 @@
 			}
 		}
 
-		// Listen for the beforeinstallprompt event
-		const handleBeforeInstallPrompt = (e: Event) => {
-			// Prevent Chrome 67 and earlier from automatically showing the prompt
-			e.preventDefault();
-			// Stash the event so it can be triggered later
-			deferredPrompt = e;
-			isPWASupported = true;
-			showInstallButton = true;
-		};
-
-		window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+		// Use the global deferred prompt captured in app.html
+		if ((window as any).deferredPrompt) {
+			deferredPrompt = (window as any).deferredPrompt;
+			isPWASupported = (window as any).isPWAInstallAvailable;
+		}
 
 		// Listen for app installed event
 		window.addEventListener('appinstalled', () => {
@@ -48,7 +42,7 @@
 		});
 
 		return () => {
-			window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+			// Cleanup if needed
 		};
 	});
 
