@@ -13,7 +13,7 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile
 COPY . .
 
 # Build the SvelteKit application
-RUN pnpm run build
+RUN pnpm run build && ls -la
 
 # Runtime stage
 FROM node:20-alpine AS runtime
@@ -26,11 +26,11 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 # Install pnpm and production dependencies only
 RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 
-# Copy built application from build stage
-COPY --from=build /app/build ./build
+# Copy the entire dist/build output from build stage
+COPY --from=build /app/build ./
 
 EXPOSE 3000
 
 ENV NODE_ENV=production
 
-CMD ["node", "build/index.js"]
+CMD ["node", "index.js"]
