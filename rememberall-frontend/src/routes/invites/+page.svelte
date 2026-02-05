@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { invitesStore } from '$lib/stores/invites.svelte';
 	import InviteCard from '$lib/components/lists/InviteCard.svelte';
 	import type { CreateInviteDto } from '$lib/api/types';
@@ -29,6 +30,8 @@
 
 	// Load invites on mount
 	$effect(() => {
+		if (!browser) return;
+
 		invitesStore.fetchSentInvites().catch(() => {});
 		invitesStore.fetchReceivedInvites().catch(() => {});
 	});

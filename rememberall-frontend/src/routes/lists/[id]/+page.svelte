@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth.svelte';
@@ -102,7 +103,8 @@
 
 	// Load list and items on mount
 	$effect(() => {
-		if (!listId) return;
+		if (!browser || !listId) return;
+
 		listsStore.fetchList(listId).catch(() => {
 			// Error already handled
 		});

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { authStore } from '$lib/stores/auth.svelte';
 	import { listsStore } from '$lib/stores/lists.svelte';
 	import { invitesStore } from '$lib/stores/invites.svelte';
@@ -22,6 +23,8 @@
 
 	// Load lists and invites on mount
 	$effect(() => {
+		if (!browser) return;
+
 		listsStore.fetchLists().catch(() => {
 			// Error already handled in store
 		});
