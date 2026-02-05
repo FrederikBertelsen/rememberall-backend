@@ -28,9 +28,9 @@
 		}
 	});
 
-	// Initialize auth on mount
-	$effect(() => {
-		if (!isInitialized) {
+	// Initialize auth on mount (runs once)
+	$effect.pre(() => {
+		if (browser && !isInitialized) {
 			initializeAuth();
 		}
 	});
