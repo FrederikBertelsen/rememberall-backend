@@ -58,8 +58,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip requests to API routes - always go to network
+  // Skip requests to API routes - always go to network with redirect handling
   if (event.request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(event.request, { redirect: 'follow' }).catch(() => {
+        return new Response('Network error', { status: 408 });
+      })
+    );
     return;
   }
 

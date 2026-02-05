@@ -21,41 +21,31 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script>
-			// Initialize PWA globals immediately
+			// Initialize PWA globals
 			window.deferredPrompt = null;
 			window.isPWAInstallAvailable = false;
-			console.log('🔧 PWA globals initialized');
 
 			// Capture beforeinstallprompt event
 			window.addEventListener('beforeinstallprompt', (e) => {
-				console.log('✅ beforeinstallprompt event fired!');
 				e.preventDefault();
 				window.deferredPrompt = e;
 				window.isPWAInstallAvailable = true;
-				console.log('✅ PWA install is available');
 			});
-
-			console.log('🔧 beforeinstallprompt listener attached');
 
 			// Register service worker
 			if ('serviceWorker' in navigator) {
-				console.log('🔧 Registering service worker...');
 				navigator.serviceWorker.register('/sw.js').then((registration) => {
-					console.log('✅ Service worker registered');
 					registration.addEventListener('updatefound', () => {
 						const newWorker = registration.installing;
 						newWorker.addEventListener('statechange', () => {
 							if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-								console.log('✅ Service worker activated and controlling page, reloading...');
 								window.location.reload();
 							}
 						});
 					});
 				}).catch((err) => {
-					console.error('❌ Service worker registration failed:', err);
+					// Service worker registration failed silently
 				});
-			} else {
-				console.error('❌ Service workers not supported');
 			}
 		</script>
 	</body>
