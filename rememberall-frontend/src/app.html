@@ -22,8 +22,18 @@
 		<div style="display: contents">%sveltekit.body%</div>
 		<script>
 			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('/sw.js').catch(() => {
-					// Service worker registration failed (may be offline or other issues)
+				navigator.serviceWorker.register('/sw.js').then((registration) => {
+					// If there's an update available, reload to show new version
+					registration.addEventListener('updatefound', () => {
+						const newWorker = registration.installing;
+						newWorker.addEventListener('statechange', () => {
+							if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+								window.location.reload();
+							}
+						});
+					});
+				}).catch(() => {
+					// Service worker registration failed
 				});
 			}
 		</script>
