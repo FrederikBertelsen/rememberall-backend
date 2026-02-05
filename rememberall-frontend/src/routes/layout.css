@@ -19,6 +19,7 @@
 	/* Special */
 	--color-error-light: rgba(239, 68, 68, 0.1);
 	--color-success-light: rgba(34, 197, 94, 0.1);
+	--color-accent-light: rgba(20, 184, 166, 0.2);
 	--color-overlay-dark: rgba(0, 0, 0, 0.85);
 }
 

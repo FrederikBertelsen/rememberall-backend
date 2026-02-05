@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { ArrowLeft, Plus, Trash2, Users } from 'lucide-svelte';
 	import { authStore } from '$lib/stores/auth.svelte';
 	import { listsStore } from '$lib/stores/lists.svelte';
 	import { itemsStore } from '$lib/stores/items.svelte';
@@ -138,26 +139,32 @@
 	<div class="page-container-scroll">
 		<div class="mb-8">
 			<div class="mb-4 flex items-center justify-between gap-4">
-				<a href="/" class="text-sm font-medium" style="color: var(--color-accent);"
-					>← {tSync($languageTag, 'pages.listDetail.back')}</a
+				<a
+					href="/"
+					class="inline-flex items-center gap-2 text-sm font-medium"
+					style="color: var(--color-accent);"
 				>
+					<ArrowLeft size={20} />
+					<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
+				</a>
 				<div class="flex shrink-0 gap-2">
 					{#if isOwner}
 						<button
 							onclick={() => (showShareForm = true)}
-							class="rounded px-2 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-							style="background-color: rgba(20, 184, 166, 0.2); color: var(--color-accent);"
+							class="flex items-center justify-center rounded px-2 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+							style="background-color: var(--color-accent-light); color: var(--color-accent);"
 							title={tSync($languageTag, 'pages.listDetail.shareList')}
 						>
-							+👥
+							<Plus size={18} />
+							<Users size={18} style="margin-left: -4px;" />
 						</button>
 						<button
 							onclick={() => (showDeleteListConfirm = true)}
-							class="rounded px-2 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+							class="flex items-center justify-center rounded px-2 py-1 text-sm disabled:cursor-not-allowed disabled:opacity-50"
 							style="background-color: var(--color-error-light); color: var(--color-danger);"
 							title={tSync($languageTag, 'pages.listDetail.deleteList')}
 						>
-							🗑️
+							<Trash2 size={18} />
 						</button>
 					{:else}
 						<button
@@ -424,12 +431,12 @@
 		<!-- Floating Add Button -->
 		<button
 			onclick={() => (showItemForm = true)}
-			class="fixed right-4 bottom-8 z-40 flex h-12 w-12 items-center justify-center rounded-lg text-xl font-bold disabled:cursor-not-allowed disabled:opacity-50"
+			class="fixed right-4 bottom-8 z-40 flex h-12 w-12 items-center justify-center rounded-lg disabled:cursor-not-allowed disabled:opacity-50"
 			style="background-color: var(--color-accent); color: var(--color-text-primary);"
 			title="Add item"
 			disabled={itemsStore.isLoading}
 		>
-			+
+			<Plus size={24} />
 		</button>
 
 		<!-- Item Form Modal -->
