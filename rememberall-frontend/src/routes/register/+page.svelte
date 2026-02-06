@@ -48,14 +48,14 @@
 	}
 </script>
 
-<div class="page-container">
+<div class="flex min-h-screen flex-col items-center justify-start gap-8 px-4 pt-8">
 	<div class="card">
 		<div class="page-heading">
-			<Logo size="lg" />
+			<Logo size="md" />
 			<p>{tSync($languageTag, 'common.createAccount')}</p>
 		</div>
 
-		<form onsubmit={handleSubmit} class="form">
+		<form onsubmit={handleSubmit} class="form mt-10">
 			{#if formError}
 				<div class="alert">
 					<p>{formError}</p>

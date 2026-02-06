@@ -40,7 +40,7 @@
 <div class="flex min-h-screen flex-col items-center justify-start gap-8 px-4 pt-8">
 	<div class="card space-y-0">
 		<div class="page-heading">
-			<Logo size="lg" />
+			<Logo size="md" />
 			<p>{tSync($languageTag, 'common.signInToAccount')}</p>
 		</div>
 

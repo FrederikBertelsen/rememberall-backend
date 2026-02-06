@@ -425,8 +425,8 @@
 				{#if !isEditMode}
 					<button
 						onclick={enterEditMode}
-						class="flex items-center justify-center rounded border px-4 py-1 text-lg font-medium disabled:cursor-not-allowed disabled:opacity-50"
-						style="background-color: var(--color-accent-light); color: var(--color-accent); border-color: var(--color-accent); min-width: 120px; min-height: 42px;"
+						class="flex items-center justify-center rounded border px-4 py-3 text-xl font-medium disabled:cursor-not-allowed disabled:opacity-50"
+						style="background-color: var(--color-accent-light); color: var(--color-accent); border-color: var(--color-accent); min-width: 120px; min-height: 48px;"
 						title="Enter edit mode"
 					>
 						{tSync($languageTag, 'buttons.edit')}
