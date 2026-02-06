@@ -44,14 +44,48 @@
 	// Long press handling for edit mode
 	let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 	let longPressDetected = $state(false);
+	let longPressInitialPos = $state<{ x: number; y: number } | null>(null);
+	let longPressThreshold = 10; // pixels - movement beyond this cancels long press
 
-	function handleLongPressStart(itemId: string) {
+	function handleLongPressStart(itemId: string, event: MouseEvent | TouchEvent) {
 		if (!isEditMode) return;
 		longPressDetected = false;
+
+		// Get initial position
+		if (event instanceof TouchEvent && event.touches.length > 0) {
+			longPressInitialPos = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+		} else if (event instanceof MouseEvent) {
+			longPressInitialPos = { x: event.clientX, y: event.clientY };
+		}
+
 		longPressTimer = setTimeout(() => {
 			longPressDetected = true;
 			handleLongPressItem(itemId);
 		}, 500);
+	}
+
+	function handleLongPressMove(event: MouseEvent | TouchEvent) {
+		if (!longPressTimer || !longPressInitialPos) return;
+
+		let currentX: number, currentY: number;
+		if (event instanceof TouchEvent && event.touches.length > 0) {
+			currentX = event.touches[0].clientX;
+			currentY = event.touches[0].clientY;
+		} else if (event instanceof MouseEvent) {
+			currentX = event.clientX;
+			currentY = event.clientY;
+		} else {
+			return;
+		}
+
+		// Calculate distance moved
+		const deltaX = Math.abs(currentX - longPressInitialPos.x);
+		const deltaY = Math.abs(currentY - longPressInitialPos.y);
+
+		// If moved beyond threshold, cancel long press
+		if (deltaX > longPressThreshold || deltaY > longPressThreshold) {
+			handleLongPressEnd();
+		}
 	}
 
 	function handleLongPressEnd() {
@@ -60,6 +94,7 @@
 			longPressTimer = null;
 		}
 		longPressDetected = false;
+		longPressInitialPos = null;
 	}
 
 	function handleItemClick(itemId: string) {
@@ -697,10 +732,12 @@
 											? 'var(--color-accent-light)'
 											: 'transparent'};"
 								onclick={() => handleItemClick(item.id)}
-								onmousedown={() => handleLongPressStart(item.id)}
+								onmousedown={(e) => handleLongPressStart(item.id, e)}
+								onmousemove={(e) => handleLongPressMove(e)}
 								onmouseup={() => handleLongPressEnd()}
 								onmouseleave={() => handleLongPressEnd()}
-								ontouchstart={() => handleLongPressStart(item.id)}
+								ontouchstart={(e) => handleLongPressStart(item.id, e)}
+								ontouchmove={(e) => handleLongPressMove(e)}
 								ontouchend={() => handleLongPressEnd()}
 								ontouchcancel={() => handleLongPressEnd()}
 								onkeydown={(e) => {
@@ -809,10 +846,12 @@
 											? 'var(--color-accent-light)'
 											: 'transparent'};"
 								onclick={() => handleItemClick(item.id)}
-								onmousedown={() => handleLongPressStart(item.id)}
+								onmousedown={(e) => handleLongPressStart(item.id, e)}
+								onmousemove={(e) => handleLongPressMove(e)}
 								onmouseup={() => handleLongPressEnd()}
 								onmouseleave={() => handleLongPressEnd()}
-								ontouchstart={() => handleLongPressStart(item.id)}
+								ontouchstart={(e) => handleLongPressStart(item.id, e)}
+								ontouchmove={(e) => handleLongPressMove(e)}
 								ontouchend={() => handleLongPressEnd()}
 								ontouchcancel={() => handleLongPressEnd()}
 								onkeydown={(e) => {
