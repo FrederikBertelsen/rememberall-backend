@@ -14,6 +14,7 @@ services:
       - rememberall-data:/app/data
     networks:
       - rememberall-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
       interval: 30s
@@ -31,6 +32,7 @@ services:
     environment:
       NODE_ENV: production
       BACKEND_URL: http://backend:5000/api
+    restart: unless-stopped
     depends_on:
       - backend
     networks:
