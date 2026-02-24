@@ -78,21 +78,19 @@
 					<div class="space-y-2">
 						{#each invitesStore.receivedInvites as invite (invite.id)}
 							<div
-								class="flex items-center justify-between rounded p-3"
+								class="space-y-2 rounded p-3"
 								style="background-color: var(--color-bg-secondary);"
 							>
-								<div class="min-w-0 flex-1">
-									<p class="truncate text-sm" style="color: var(--color-text-secondary);">
-										<span style="color: var(--color-text-primary);">{invite.inviteSenderName}</span>
-										{tSync(lang, 'invites.invitedYouTo')}
-										<span style="color: var(--color-text-primary);">{invite.listName}</span>
-									</p>
-								</div>
-								<div class="ml-2 flex shrink-0 gap-2">
+								<p class="text-sm" style="color: var(--color-text-secondary);">
+									<span style="color: var(--color-text-primary);">{invite.inviteSenderName}</span>
+									{tSync(lang, 'invites.invitedYouTo')}
+									<span style="color: var(--color-text-primary);">{invite.listName}</span>
+								</p>
+								<div class="flex gap-2">
 									<button
 										onclick={() => handleAcceptInvite(invite.id)}
 										disabled={invitesStore.isLoading}
-										class="rounded px-2 py-1 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-50"
+										class="rounded px-4 py-2 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
 										style="background-color: var(--color-accent); color: var(--color-text-primary);"
 									>
 										{tSync(lang, 'buttons.accept')}
@@ -100,7 +98,7 @@
 									<button
 										onclick={() => handleDeclineInvite(invite.id)}
 										disabled={invitesStore.isLoading}
-										class="rounded px-2 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-50"
+										class="rounded px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
 										style="background-color: var(--color-bg-primary); border: 1px solid var(--color-border); color: var(--color-text-muted);"
 									>
 										{tSync(lang, 'buttons.decline')}
@@ -110,23 +108,19 @@
 						{/each}
 						{#each invitesStore.sentInvites as invite (invite.id)}
 							<div
-								class="flex items-center justify-between rounded p-3"
+								class="space-y-2 rounded p-3"
 								style="background-color: var(--color-bg-secondary);"
 							>
-								<div class="min-w-0 flex-1">
-									<p class="truncate text-sm" style="color: var(--color-text-secondary);">
-										{tSync(lang, 'invites.youInvited')}
-										<span style="color: var(--color-text-primary);"
-											>{invite.inviteRecieverName}</span
-										>
-										{tSync(lang, 'invites.to')}
-										<span style="color: var(--color-text-primary);">{invite.listName}</span>
-									</p>
-								</div>
+								<p class="text-sm" style="color: var(--color-text-secondary);">
+									{tSync(lang, 'invites.youInvited')}
+									<span style="color: var(--color-text-primary);">{invite.inviteRecieverName}</span>
+									{tSync(lang, 'invites.to')}
+									<span style="color: var(--color-text-primary);">{invite.listName}</span>
+								</p>
 								<button
 									onclick={() => handleRevokeInvite(invite.id)}
 									disabled={invitesStore.isLoading}
-									class="ml-2 shrink-0 rounded px-2 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-50"
+									class="rounded px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
 									style="background-color: var(--color-bg-primary); border: 1px solid var(--color-border); color: var(--color-text-muted);"
 								>
 									{tSync(lang, 'buttons.revoke')}

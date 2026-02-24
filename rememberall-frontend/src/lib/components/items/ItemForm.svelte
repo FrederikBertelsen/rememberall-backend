@@ -7,9 +7,10 @@
 		listId: string;
 		isLoading?: boolean;
 		autoFocus?: boolean;
+		onAdd?: (text: string) => void;
 	}
 
-	let { listId, isLoading = false, autoFocus = false }: Props = $props();
+	let { listId, isLoading = false, autoFocus = false, onAdd }: Props = $props();
 
 	let text = $state<string>('');
 	let error = $state<string | null>(null);
@@ -82,17 +83,26 @@
 		}
 
 		try {
-			// If a completed item was selected, mark it incomplete instead of creating new
-			if (selectedSuggestion && selectedSuggestion.isCompleted) {
-				await itemsStore.incompleteItem(selectedSuggestion.id, listId);
-			} else {
-				// Check if an item with this exact text already exists
-				const trimmedText = text.trim().toLowerCase();
-				const existingItem = allItems.find((item) => item.text.toLowerCase() === trimmedText);
+			const trimmedText = text.trim().toLowerCase();
 
-				// Only create if it doesn't already exist
-				if (!existingItem) {
-					await itemsStore.createItem({ todoListId: listId, text: trimmedText });
+			if (onAdd) {
+				// Delegate to parent (edit mode) — parent decides what to do
+				onAdd(trimmedText);
+			} else {
+				// If a completed item was selected, mark it incomplete instead of creating new
+				if (selectedSuggestion && selectedSuggestion.isCompleted) {
+					await itemsStore.incompleteItem(selectedSuggestion.id, listId);
+				} else {
+					// Check if an item with this exact text already exists
+					const existingItem = allItems.find((item) => item.text.toLowerCase() === trimmedText);
+
+					if (existingItem && existingItem.isCompleted) {
+						// Reuse the completed item by marking it incomplete
+						await itemsStore.incompleteItem(existingItem.id, listId);
+					} else if (!existingItem) {
+						await itemsStore.createItem({ todoListId: listId, text: trimmedText });
+					}
+					// If existingItem exists and is not completed, do nothing (already on the list)
 				}
 			}
 

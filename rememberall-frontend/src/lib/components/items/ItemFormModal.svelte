@@ -7,9 +7,10 @@
 		show?: boolean;
 		listId: string;
 		isLoading?: boolean;
+		onAdd?: (text: string) => void;
 	}
 
-	let { show = $bindable(false), listId, isLoading = false }: Props = $props();
+	let { show = $bindable(false), listId, isLoading = false, onAdd }: Props = $props();
 
 	let viewportState = createViewportState();
 	let modalTopPercent = $derived(calculateModalPosition(viewportState, 300).topPercent);
@@ -57,7 +58,7 @@
 				</button>
 			</div>
 
-			<ItemForm {listId} {isLoading} autoFocus={show} />
+			<ItemForm {listId} {isLoading} autoFocus={show} {onAdd} />
 
 			<button
 				type="button"

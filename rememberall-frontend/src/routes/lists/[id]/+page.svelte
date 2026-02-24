@@ -34,6 +34,13 @@
 	let isEditMode = $state(false);
 	let isSaving = $state(false);
 
+	// Pending new items (added in edit mode, committed on save)
+	interface PendingNewItem {
+		localId: string;
+		text: string;
+	}
+	let pendingNewItems = $state<PendingNewItem[]>([]);
+
 	// Viewport state for modal positioning
 	let viewportState = createViewportState();
 	let leaveModalTopPercent = $derived(calculateModalPosition(viewportState, 200).topPercent);
@@ -191,6 +198,7 @@
 	function exitEditMode(): void {
 		isEditMode = false;
 		localItems = {};
+		pendingNewItems = [];
 	}
 
 	function handleToggleInEditMode(itemId: string): void {
@@ -207,7 +215,7 @@
 	}
 
 	async function handleSaveChanges(): Promise<void> {
-		if (changedItems.length === 0) {
+		if (changedItems.length === 0 && pendingNewItems.length === 0) {
 			exitEditMode();
 			return;
 		}
@@ -215,6 +223,11 @@
 		isSaving = true;
 
 		try {
+			// Create pending new items first
+			for (const pending of pendingNewItems) {
+				await itemsStore.createItem({ todoListId: listId, text: pending.text });
+			}
+
 			// Process changes in order: text edits first, then completion changes, then deletions last
 			for (const itemId of changedItems) {
 				const localState = localItems[itemId];
@@ -256,6 +269,29 @@
 
 	function handleCancelChanges(): void {
 		exitEditMode();
+	}
+
+	function handleAddItemInEditMode(text: string): void {
+		const trimmed = text.trim().toLowerCase();
+		if (!trimmed) return;
+
+		// If it matches a completed item, toggle it locally (reuse)
+		const matchingCompleted = items.find((i) => i.isCompleted && i.text.toLowerCase() === trimmed);
+		if (matchingCompleted) {
+			handleToggleInEditMode(matchingCompleted.id);
+			return;
+		}
+
+		// If it's already on the list as an uncompleted item, skip
+		const existingUncompleted = items.find(
+			(i) => !i.isCompleted && i.text.toLowerCase() === trimmed
+		);
+		if (existingUncompleted) return;
+
+		// If already pending, skip
+		if (pendingNewItems.some((p) => p.text.toLowerCase() === trimmed)) return;
+
+		pendingNewItems = [...pendingNewItems, { localId: trimmed, text: trimmed }];
 	}
 
 	function handleLongPressItem(itemId: string): void {
@@ -393,14 +429,26 @@
 	<div class="page-container-scroll">
 		<div class="mb-8">
 			<div class="mb-4 flex items-center justify-between gap-4">
-				<a
-					href="/"
-					class="text-md inline-flex items-center gap-2 font-medium"
-					style="color: var(--color-accent);"
-				>
-					<ArrowLeft size={20} />
-					<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
-				</a>
+				{#if isEditMode}
+					<button
+						type="button"
+						onclick={handleCancelChanges}
+						class="text-md inline-flex items-center gap-2 font-medium"
+						style="color: var(--color-accent);"
+					>
+						<ArrowLeft size={20} />
+						<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
+					</button>
+				{:else}
+					<a
+						href="/"
+						class="text-md inline-flex items-center gap-2 font-medium"
+						style="color: var(--color-accent);"
+					>
+						<ArrowLeft size={20} />
+						<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
+					</a>
+				{/if}
 				{#if !isEditMode}
 					<div class="flex shrink-0 gap-4">
 						{#if isOwner}
@@ -443,13 +491,13 @@
 						</button>
 						<button
 							onclick={handleSaveChanges}
-							disabled={changedItems.length === 0 || isSaving}
+							disabled={(changedItems.length === 0 && pendingNewItems.length === 0) || isSaving}
 							class="text-md min-h-12 rounded px-4 py-3 font-medium whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
 							style="background-color: var(--color-accent); color: var(--color-text-primary);"
 						>
 							{isSaving
 								? tSync($languageTag, 'pages.listDetail.saving')
-								: `${tSync($languageTag, 'pages.listDetail.save')} (${changedItems.length})`}
+								: `${tSync($languageTag, 'pages.listDetail.save')} (${changedItems.length + pendingNewItems.length})`}
 						</button>
 					</div>
 				{/if}
@@ -714,8 +762,10 @@
 			onRevoke={handleRevokeAccess}
 		/>
 
+		<ItemFormModal bind:show={showItemForm} {listId} onAdd={handleAddItemInEditMode} />
+
 		<div class="space-y-8">
-			{#if uncompletedItems.length > 0}
+			{#if uncompletedItems.length > 0 || (isEditMode && pendingNewItems.length > 0)}
 				<div class="min-h-50 space-y-0">
 					{#each uncompletedItems as item, index (item.id)}
 						{#if isEditMode}
@@ -819,10 +869,32 @@
 							<ItemRow
 								{item}
 								isLoading={itemsStore.isLoading}
-								isLast={index === uncompletedItems.length - 1}
+								isLast={index === uncompletedItems.length - 1 && pendingNewItems.length === 0}
 							/>
 						{/if}
 					{/each}
+					{#if isEditMode}
+						{#each pendingNewItems as pending (pending.localId)}
+							<div
+								class="flex min-h-14 items-center gap-3 border-b px-3 py-2"
+								style="border-color: var(--color-border); background-color: var(--color-success-light);"
+							>
+								<div class="flex-1">
+									<span class="text-lg" style="color: var(--color-success);">{pending.text}</span>
+								</div>
+								<button
+									type="button"
+									onclick={() =>
+										(pendingNewItems = pendingNewItems.filter(
+											(p) => p.localId !== pending.localId
+										))}
+									class="flex h-8 w-8 shrink-0 items-center justify-center"
+									style="color: var(--color-danger);"
+									aria-label="Remove pending item"><Trash2 size={24} /></button
+								>
+							</div>
+						{/each}
+					{/if}
 				</div>
 			{/if}
 
@@ -952,8 +1024,8 @@
 			{/if}
 		</div>
 
-		<!-- Floating Add Button -->
-		{#if !isEditMode}
+		<!-- Floating Add Button (edit mode only) -->
+		{#if isEditMode}
 			<button
 				onclick={() => (showItemForm = true)}
 				class="fixed right-4 bottom-8 z-40 flex h-14 w-14 items-center justify-center rounded-lg border disabled:cursor-not-allowed disabled:opacity-50"
@@ -964,8 +1036,5 @@
 				<Plus size={36} />
 			</button>
 		{/if}
-
-		<!-- Item Form Modal -->
-		<ItemFormModal bind:show={showItemForm} {listId} />
 	</div>
 {/if}
