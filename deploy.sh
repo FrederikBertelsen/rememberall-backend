@@ -27,7 +27,12 @@ ssh -i "$SSH_KEY" "$SERVER_USER@$SERVER_HOST" bash << 'REMOTE_SCRIPT'
   
   echo "📂 Current directory: $(pwd)"
   
-  echo "🛑 Stopping containers..."
+  echo "� Backing up database..."
+  TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+  cp "$PROJECT_ROOT/data/app.db" "$PROJECT_ROOT/data/app.db.bak.$TIMESTAMP"
+  echo "✅ Database backed up to: data/app.db.bak.$TIMESTAMP"
+  
+  echo "�🛑 Stopping containers..."
   docker compose down
   
   echo "📥 Pulling latest changes..."

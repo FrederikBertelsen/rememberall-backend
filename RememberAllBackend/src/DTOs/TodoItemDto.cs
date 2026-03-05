@@ -5,5 +5,6 @@ public record TodoItemDto
     Guid Id,
     string Text,
     bool IsCompleted,
-    int CompletionCount
+    int CompletionCount,
+    DateTime UpdatedAt
 );

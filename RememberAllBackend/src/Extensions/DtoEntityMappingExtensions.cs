@@ -69,7 +69,8 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             TodoListId = todoList.Id,
-            Text = createTodoItemDto.Text
+            Text = createTodoItemDto.Text,
+            UpdatedAt = DateTime.UtcNow
         };
     }
     public static TodoItem ToEntity(this CreateTodoItemDto createTodoItemDto, TodoList todoList)
@@ -77,7 +78,8 @@ public static class EntityDtoMappingExtensions
         return new()
         {
             TodoListId = createTodoItemDto.TodoListId,
-            Text = createTodoItemDto.Text
+            Text = createTodoItemDto.Text,
+            UpdatedAt = DateTime.UtcNow
         };
     }
 
@@ -87,7 +89,8 @@ public static class EntityDtoMappingExtensions
             Id: todoItem.Id,
             Text: todoItem.Text,
             IsCompleted: todoItem.IsCompleted,
-            CompletionCount: todoItem.CompletionCount
+            CompletionCount: todoItem.CompletionCount,
+            UpdatedAt: todoItem.UpdatedAt
         );
     }
 

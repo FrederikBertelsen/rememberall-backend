@@ -1,3 +1,32 @@
+
+
+make sure that no info is leaked through exceptions:
+	for example:
+		update todoItem throws NotFoundException if not found
+		It doens't check if the user has access to the todo list first
+		this means that the user will get unauth if the todo item exists, and notFound if it doesn't exist.
+
+update tests to match changes, and test new endpoint
+
+
+add value size check for to backend:check and also hardcoded to sql db
+
+sent notifications aobut changes?
+
+
+
+language switch isn't saved on iphone.
+
+
+admin page, and simple bug report / feedback system.
+
+add IOS install help page?
+
+Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+
+
+
+
 # RememberAll Frontend
 
 A modern, collaborative todo list application built with **SvelteKit** and **Svelte 5**. Share lists with others, manage tasks together, and stay organized with a clean, intuitive interface.

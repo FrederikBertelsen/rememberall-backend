@@ -80,7 +80,7 @@ public partial class Program
 
 
         // Determine database path based on environment
-        var databasePath = builder.Environment.IsProduction() 
+        var databasePath = builder.Environment.IsProduction()
             ? "/app/data/app.db"
             : "app.db";
         var connectionString = $"Data Source={databasePath}";
@@ -123,11 +123,11 @@ public partial class Program
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             try
             {
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
             }
             catch (Exception ex)
             {
-                app.Logger.LogError(ex, "An error occurred while initialising the database.");
+                app.Logger.LogError(ex, "An error occurred while migrating the database.");
                 throw;
             }
         }

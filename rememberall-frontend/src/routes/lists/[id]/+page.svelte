@@ -54,6 +54,9 @@
 	let longPressInitialPos = $state<{ x: number; y: number } | null>(null);
 	let longPressThreshold = 10; // pixels - movement beyond this cancels long press
 
+	// Track uncompleted items count for auto-scroll
+	let previousUncompletedCount = $state(0);
+
 	function handleLongPressStart(itemId: string, event: MouseEvent | TouchEvent) {
 		if (!isEditMode) return;
 		longPressDetected = false;
@@ -162,13 +165,35 @@
 		});
 	});
 
-	// Separate and sort items (always use original isCompleted for section separation, not local state)
+	// Separate and sort items
+	// In edit mode, items that are locally uncompleted appear in BOTH sections for better UX
 	let completedItems = $derived(
 		displayItems.filter((i) => i.isCompleted).sort((a, b) => b.completionCount - a.completionCount)
 	);
-	let uncompletedItems = $derived(
-		displayItems.filter((i) => !i.isCompleted).sort((a, b) => b.completionCount - a.completionCount)
-	);
+	let uncompletedItems = $derived.by(() => {
+		const filtered = displayItems.filter((i) => {
+			if (!isEditMode) return !i.isCompleted;
+			// In edit mode: show originally uncompleted OR completed items that are now locally uncompleted
+			return !i.isCompleted || (i.isCompleted && (i as any).localIsCompleted === false);
+		});
+
+		if (!isEditMode) {
+			// In view mode: sort by updatedAt (oldest first)
+			return filtered.sort(
+				(a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+			);
+		}
+
+		// In edit mode: originally uncompleted items first (sorted by updatedAt), then newly unchecked items at bottom
+		const originallyUncompleted = filtered
+			.filter((i) => !i.isCompleted)
+			.sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+		const newlyUnchecked = filtered
+			.filter((i) => i.isCompleted && (i as any).localIsCompleted === false)
+			.sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+
+		return [...originallyUncompleted, ...newlyUnchecked];
+	});
 
 	async function handleToggleItem(itemId: string): Promise<void> {
 		if (!listId) return;
@@ -193,12 +218,15 @@
 		);
 
 		isEditMode = true;
+		// Initialize the count for auto-scroll tracking
+		previousUncompletedCount = uncompletedItems.length;
 	}
 
 	function exitEditMode(): void {
 		isEditMode = false;
 		localItems = {};
 		pendingNewItems = [];
+		previousUncompletedCount = 0;
 	}
 
 	function handleToggleInEditMode(itemId: string): void {
@@ -416,6 +444,23 @@
 		}, 1000);
 
 		return () => clearInterval(interval);
+	});
+
+	// Auto-scroll to maintain visual position when uncompleted items are added in edit mode
+	$effect(() => {
+		if (!browser || !isEditMode) return;
+
+		const currentCount = uncompletedItems.length;
+
+		// If count increased, scroll down to compensate for the new row
+		if (currentCount > previousUncompletedCount) {
+			const rowsAdded = currentCount - previousUncompletedCount;
+			// Fixed row height is approximately 56px (min-h-14 = 3.5rem = 56px)
+			const scrollAmount = rowsAdded * 56;
+			window.scrollBy({ top: scrollAmount, behavior: 'instant' });
+		}
+
+		previousUncompletedCount = currentCount;
 	});
 </script>
 
@@ -914,9 +959,7 @@
 									? 'var(--color-danger-light)'
 									: (item as any).localNewText !== undefined
 										? 'var(--color-warning-light)'
-										: (item as any).localIsCompleted !== item.isCompleted
-											? 'var(--color-accent-light)'
-											: 'transparent'};"
+										: 'transparent'};"
 								onclick={() => handleItemClick(item.id)}
 								onmousedown={(e) => handleLongPressStart(item.id, e)}
 								onmousemove={(e) => handleLongPressMove(e)}
@@ -943,9 +986,11 @@
 											<div
 												style="color: {(item as any).localMarkedForDeletion
 													? 'var(--color-error)'
-													: (item as any).localIsCompleted
-														? 'var(--color-text-muted)'
-														: 'var(--color-text-primary)'}; text-decoration: {(item as any)
+													: (item as any).localIsCompleted === false
+														? 'var(--color-text-primary)'
+														: (item as any).localIsCompleted
+															? 'var(--color-text-muted)'
+															: 'var(--color-text-primary)'}; text-decoration: {(item as any)
 													.localIsCompleted
 													? 'line-through'
 													: 'none'};"
@@ -959,9 +1004,11 @@
 											class="text-lg"
 											style="color: {(item as any).localMarkedForDeletion
 												? 'var(--color-error)'
-												: (item as any).localIsCompleted
-													? 'var(--color-text-muted)'
-													: 'var(--color-text-primary)'}; text-decoration: {(item as any)
+												: (item as any).localIsCompleted === false
+													? 'var(--color-text-primary)'
+													: (item as any).localIsCompleted
+														? 'var(--color-text-muted)'
+														: 'var(--color-text-primary)'}; text-decoration: {(item as any)
 												.localMarkedForDeletion || (item as any).localIsCompleted
 												? 'line-through'
 												: 'none'};"

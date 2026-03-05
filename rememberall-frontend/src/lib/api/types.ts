@@ -56,6 +56,7 @@ export interface TodoItemDto {
   text: string;
   isCompleted: boolean;
   completionCount: number;
+  updatedAt: string;
 }
 
 export interface CreateTodoItemDto {
