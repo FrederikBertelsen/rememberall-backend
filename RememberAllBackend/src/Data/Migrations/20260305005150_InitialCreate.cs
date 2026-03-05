@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RememberAll.src.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUpdatedAtToTodoList : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -115,6 +115,7 @@ namespace RememberAll.src.Data.Migrations
                     Text = table.Column<string>(type: "TEXT", nullable: false),
                     IsCompleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     CompletionCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

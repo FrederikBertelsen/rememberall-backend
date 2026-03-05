@@ -11,8 +11,8 @@ using RememberAll.src.Data;
 namespace RememberAll.src.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260305001510_AddUpdatedAtTodoItem")]
-    partial class AddUpdatedAtTodoItem
+    [Migration("20260305005150_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
