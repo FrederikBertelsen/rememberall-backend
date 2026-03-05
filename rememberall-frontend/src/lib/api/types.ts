@@ -69,6 +69,32 @@ export interface UpdateTodoItemDto {
   text: string;
 }
 
+export interface CreateBatchTodoItemDto {
+  text: string;
+}
+
+export interface UpdateBatchTodoItemDto {
+  id: string;
+  text: string;
+}
+
+export interface BatchUpdateTodoItemsDto {
+  todoListId: string;
+  creates?: CreateBatchTodoItemDto[];
+  updates?: UpdateBatchTodoItemDto[];
+  completes?: string[];
+  incompletes?: string[];
+  deletes?: string[];
+}
+
+export interface BatchUpdateTodoItemsResultDto {
+  created: TodoItemDto[];
+  updated: TodoItemDto[];
+  completed: TodoItemDto[];
+  incompleted: TodoItemDto[];
+  deleted: string[];
+}
+
 // ============================================================================
 // LIST ACCESS DTOs
 // ============================================================================

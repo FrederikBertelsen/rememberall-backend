@@ -13,4 +13,6 @@ public interface ITodoItemService
     public Task<TodoItemDto> MarkTodoItemAsCompleteAsync(Guid todoItemId);
     public Task<TodoItemDto> MarkTodoItemAsIncompleteAsync(Guid todoItemId);
     public Task DeleteTodoItemAsync(Guid todoItemId);
+
+    public Task<BatchUpdateTodoItemsResultDto> BatchUpdateTodoItemsAsync(BatchUpdateTodoItemsDto batchUpdateDto);
 }

@@ -6,7 +6,9 @@ import { apiGet, apiPost, apiPatch, apiDelete } from '$lib/api/client';
 import type {
   TodoItemDto,
   CreateTodoItemDto,
-  UpdateTodoItemDto
+  UpdateTodoItemDto,
+  BatchUpdateTodoItemsDto,
+  BatchUpdateTodoItemsResultDto
 } from '$lib/api/types';
 
 /**
@@ -49,4 +51,13 @@ export async function incompleteItem(itemId: string): Promise<TodoItemDto> {
  */
 export async function deleteItem(itemId: string): Promise<void> {
   return apiDelete(`/todoitems/${itemId}`);
+}
+
+/**
+ * Batch update multiple todo items in a single transaction
+ */
+export async function batchUpdateItems(
+  data: BatchUpdateTodoItemsDto
+): Promise<BatchUpdateTodoItemsResultDto> {
+  return apiPost<BatchUpdateTodoItemsResultDto>('/todoitems/batch', data);
 }

@@ -6,7 +6,9 @@
 import {
   type TodoItemDto,
   type CreateTodoItemDto,
-  type UpdateTodoItemDto
+  type UpdateTodoItemDto,
+  type BatchUpdateTodoItemsDto,
+  type BatchUpdateTodoItemsResultDto
 } from '$lib/api/types';
 import * as itemsService from '$lib/api/services/items';
 import { ApiError, handleApiError } from '$lib/utils/errors';
@@ -156,6 +158,55 @@ class ItemsStore {
       if (items) {
         this.itemsByList[listId] = items.filter((item) => item.id !== itemId);
       }
+    } catch (e) {
+      const error = e instanceof ApiError ? e : new ApiError(500, String(e));
+      this.error = handleApiError(error);
+      throw error;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  /**
+   * Batch update multiple items in a single transaction
+   */
+  async batchUpdateItems(data: BatchUpdateTodoItemsDto): Promise<BatchUpdateTodoItemsResultDto> {
+    this.isLoading = true;
+    this.error = null;
+
+    try {
+      const result = await itemsService.batchUpdateItems(data);
+      const listId = data.todoListId;
+      let items = this.itemsByList[listId] ?? [];
+
+      // Remove deleted items
+      if (result.deleted && result.deleted.length > 0) {
+        items = items.filter((item) => !result.deleted.includes(item.id));
+      }
+
+      // Update existing items with new data
+      const allUpdatedItems = [
+        ...result.updated,
+        ...result.completed,
+        ...result.incompleted
+      ];
+      
+      for (const updatedItem of allUpdatedItems) {
+        const index = items.findIndex((item) => item.id === updatedItem.id);
+        if (index >= 0) {
+          items[index] = updatedItem;
+        }
+      }
+
+      // Add newly created items
+      if (result.created && result.created.length > 0) {
+        items = [...items, ...result.created];
+      }
+
+      // Update the store
+      this.itemsByList[listId] = items;
+
+      return result;
     } catch (e) {
       const error = e instanceof ApiError ? e : new ApiError(500, String(e));
       this.error = handleApiError(error);

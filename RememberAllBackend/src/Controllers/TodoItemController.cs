@@ -19,6 +19,13 @@ public class TodoItemController(ITodoItemService todoItemService) : ControllerBa
         return Ok(createdTodoItemDto);
     }
 
+    [HttpPost("batch")]
+    public async Task<ActionResult<BatchUpdateTodoItemsResultDto>> BatchUpdateTodoItems(BatchUpdateTodoItemsDto batchUpdateDto)
+    {
+        var result = await todoItemService.BatchUpdateTodoItemsAsync(batchUpdateDto);
+        return Ok(result);
+    }
+
     [HttpGet("bylist/{listId}")]
     public async Task<ActionResult<ICollection<TodoItemDto>>> GetTodoItemsByListId(Guid listId)
     {

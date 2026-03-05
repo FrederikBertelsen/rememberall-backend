@@ -14,7 +14,11 @@
 	import AccessRow from '$lib/components/lists/AccessRow.svelte';
 	import ItemFormModal from '$lib/components/items/ItemFormModal.svelte';
 	import ShareFormModal from '$lib/components/lists/ShareFormModal.svelte';
-	import type { CreateInviteDto } from '$lib/api/types';
+	import type {
+		CreateInviteDto,
+		CreateBatchTodoItemDto,
+		UpdateBatchTodoItemDto
+	} from '$lib/api/types';
 
 	const listId = $page.params.id ?? '';
 	let list = $derived(listId ? listsStore.getListById(listId) : null);
@@ -58,9 +62,6 @@
 	// Note: completedSectionRef is a DOM ref (bind:this), not reactive state
 	let completedSectionRef = $state<HTMLDivElement | null>(null);
 	let lastKnownPosition = $state<number | null>(null);
-
-	// Track scroll position and item count for position-aware auto-scroll
-	let previousItemCount = $state(0);
 
 	function handleLongPressStart(itemId: string, event: MouseEvent | TouchEvent) {
 		if (!isEditMode) return;
@@ -257,39 +258,61 @@
 		isSaving = true;
 
 		try {
-			// Create pending new items first
+			// Prepare batch update data
+			const creates: CreateBatchTodoItemDto[] = [];
+			const updates: UpdateBatchTodoItemDto[] = [];
+			const completes: string[] = [];
+			const incompletes: string[] = [];
+			const deletes: string[] = [];
+
+			// Add pending new items to creates
 			for (const pending of pendingNewItems) {
-				await itemsStore.createItem({ todoListId: listId, text: pending.text });
+				creates.push({ text: pending.text });
 			}
 
-			// Process changes in order: text edits first, then completion changes, then deletions last
+			// Process changed items
 			for (const itemId of changedItems) {
 				const localState = localItems[itemId];
 				const originalItem = items.find((i) => i.id === itemId);
 				if (!originalItem || !localState) continue;
 
-				// 1. Handle text edits
-				if (localState.newText !== undefined && localState.newText !== originalItem.text) {
-					await itemsStore.updateItem({ id: itemId, text: localState.newText }, listId);
+				// Handle deletions
+				if (localState.markedForDeletion) {
+					deletes.push(itemId);
+					continue; // Skip other operations for deleted items
 				}
 
-				// 2. Handle completion changes (only if item isn't being deleted)
-				if (
-					!localState.markedForDeletion &&
-					localState.isCompleted !== undefined &&
-					localState.isCompleted !== originalItem.isCompleted
-				) {
+				// Handle text edits
+				if (localState.newText !== undefined && localState.newText !== originalItem.text) {
+					updates.push({ id: itemId, text: localState.newText });
+				}
+
+				// Handle completion changes
+				if (localState.isCompleted !== undefined && localState.isCompleted !== originalItem.isCompleted) {
 					if (localState.isCompleted) {
-						await itemsStore.completeItem(itemId, listId);
+						completes.push(itemId);
 					} else {
-						await itemsStore.incompleteItem(itemId, listId);
+						incompletes.push(itemId);
 					}
 				}
+			}
 
-				// 3. Handle deletions last
-				if (localState.markedForDeletion) {
-					await itemsStore.deleteItem(itemId, listId);
-				}
+			// Send batch update if there are any changes
+			if (
+				creates.length > 0 ||
+				updates.length > 0 ||
+				completes.length > 0 ||
+				incompletes.length > 0 ||
+				deletes.length > 0
+			) {
+				await itemsStore.batchUpdateItems({
+					todoListId: listId,
+					creates: creates.length > 0 ? creates : undefined,
+					updates: updates.length > 0 ? updates : undefined,
+					completes: completes.length > 0 ? completes : undefined,
+					incompletes: incompletes.length > 0 ? incompletes : undefined,
+					deletes: deletes.length > 0 ? deletes : undefined
+				});
 			}
 
 			// Exit edit mode on success
