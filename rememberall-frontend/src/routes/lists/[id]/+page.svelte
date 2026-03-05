@@ -59,8 +59,8 @@
 	let longPressThreshold = 10; // pixels - movement beyond this cancels long press
 
 	// Track completed section position for scroll anchoring
-	// Note: completedSectionRef is a DOM ref (bind:this), not reactive state
 	let completedSectionRef = $state<HTMLDivElement | null>(null);
+	let uncompletedSectionRef = $state<HTMLDivElement | null>(null);
 	let lastKnownPosition = $state<number | null>(null);
 
 	function handleLongPressStart(itemId: string, event: MouseEvent | TouchEvent) {
@@ -233,6 +233,7 @@
 		localItems = {};
 		pendingNewItems = [];
 		completedSectionRef = null;
+		uncompletedSectionRef = null;
 		lastKnownPosition = null;
 	}
 
@@ -288,7 +289,10 @@
 				}
 
 				// Handle completion changes
-				if (localState.isCompleted !== undefined && localState.isCompleted !== originalItem.isCompleted) {
+				if (
+					localState.isCompleted !== undefined &&
+					localState.isCompleted !== originalItem.isCompleted
+				) {
 					if (localState.isCompleted) {
 						completes.push(itemId);
 					} else {
@@ -856,7 +860,7 @@
 
 		<div class="space-y-8">
 			{#if uncompletedItems.length > 0 || (isEditMode && pendingNewItems.length > 0)}
-				<div class="min-h-50 space-y-0">
+				<div bind:this={uncompletedSectionRef} class="min-h-50 space-y-0">
 					{#each uncompletedItems as item, index (item.id)}
 						{#if isEditMode}
 							<div
