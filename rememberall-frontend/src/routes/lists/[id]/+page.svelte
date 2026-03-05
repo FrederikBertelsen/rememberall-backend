@@ -54,8 +54,13 @@
 	let longPressInitialPos = $state<{ x: number; y: number } | null>(null);
 	let longPressThreshold = 10; // pixels - movement beyond this cancels long press
 
-	// Track uncompleted items count for auto-scroll
-	let previousUncompletedCount = $state(0);
+	// Track completed section position for scroll anchoring
+	// Note: completedSectionRef is a DOM ref (bind:this), not reactive state
+	let completedSectionRef = $state<HTMLDivElement | null>(null);
+	let lastKnownPosition = $state<number | null>(null);
+
+	// Track scroll position and item count for position-aware auto-scroll
+	let previousItemCount = $state(0);
 
 	function handleLongPressStart(itemId: string, event: MouseEvent | TouchEvent) {
 		if (!isEditMode) return;
@@ -218,15 +223,16 @@
 		);
 
 		isEditMode = true;
-		// Initialize the count for auto-scroll tracking
-		previousUncompletedCount = uncompletedItems.length;
+		// Reset position tracking when entering edit mode
+		lastKnownPosition = null;
 	}
 
 	function exitEditMode(): void {
 		isEditMode = false;
 		localItems = {};
 		pendingNewItems = [];
-		previousUncompletedCount = 0;
+		completedSectionRef = null;
+		lastKnownPosition = null;
 	}
 
 	function handleToggleInEditMode(itemId: string): void {
@@ -446,21 +452,37 @@
 		return () => clearInterval(interval);
 	});
 
-	// Auto-scroll to maintain visual position when uncompleted items are added in edit mode
+	// Maintain completed section position when items move between sections
+	// Capture position BEFORE DOM updates
+	$effect.pre(() => {
+		if (!browser || !isEditMode || !completedSectionRef) return;
+
+		// Track item counts to detect when changes are happening
+		const _ = [uncompletedItems.length, pendingNewItems.length];
+
+		// Capture position before any DOM changes
+		lastKnownPosition = completedSectionRef.getBoundingClientRect().top;
+	});
+
+	// Compare position AFTER DOM updates and compensate
 	$effect(() => {
-		if (!browser || !isEditMode) return;
+		if (!browser || !isEditMode || !completedSectionRef || lastKnownPosition === null) return;
 
-		const currentCount = uncompletedItems.length;
+		// Track the same changes to run after DOM updates
+		const _ = [uncompletedItems.length, pendingNewItems.length];
 
-		// If count increased, scroll down to compensate for the new row
-		if (currentCount > previousUncompletedCount) {
-			const rowsAdded = currentCount - previousUncompletedCount;
-			// Fixed row height is approximately 56px (min-h-14 = 3.5rem = 56px)
-			const scrollAmount = rowsAdded * 56;
-			window.scrollBy({ top: scrollAmount, behavior: 'instant' });
-		}
+		// After DOM updates, check if position changed
+		requestAnimationFrame(() => {
+			if (!completedSectionRef || lastKnownPosition === null) return;
 
-		previousUncompletedCount = currentCount;
+			const currentPosition = completedSectionRef.getBoundingClientRect().top;
+			const positionChange = currentPosition - lastKnownPosition;
+
+			// If the section moved, scroll to keep it at the same visual position
+			if (Math.abs(positionChange) > 0.5) {
+				window.scrollBy({ top: positionChange, behavior: 'instant' });
+			}
+		});
 	});
 </script>
 
@@ -945,6 +967,7 @@
 
 			{#if completedItems.length > 0}
 				<div
+					bind:this={completedSectionRef}
 					class="space-y-0"
 					style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--color-text-primary);"
 				>
