@@ -524,15 +524,14 @@
 		<div class="mb-8">
 			<div class="mb-4 flex items-center justify-between gap-4">
 				{#if isEditMode}
-					<button
-						type="button"
-						onclick={handleCancelChanges}
+					<div
+						aria-hidden="true"
 						class="text-md inline-flex items-center gap-2 font-medium"
-						style="color: var(--color-accent);"
+						style="visibility:hidden;"
 					>
 						<ArrowLeft size={20} />
 						<span>{tSync($languageTag, 'pages.listDetail.back')}</span>
-					</button>
+					</div>
 				{:else}
 					<a
 						href="/"
