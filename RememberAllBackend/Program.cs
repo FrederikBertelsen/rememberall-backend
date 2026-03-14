@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using RememberAll.src.Data;
 using RememberAll.src.Repositories;
@@ -9,6 +10,7 @@ using RememberAll.src.Services.Interfaces;
 using RememberAll.src.Entities;
 using Microsoft.OpenApi;
 using RememberAll.src.Middleware;
+using System.IO;
 
 namespace RememberAll;
 
@@ -19,6 +21,23 @@ public partial class Program
     public static WebApplication CreateWebApplication(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        // Persist Data Protection keys so auth cookies remain valid across container restarts.
+        // Configure via `DataProtection:KeysPath` (e.g. env var `DataProtection__KeysPath`).
+        // In production, default to `/app/keys`.
+        var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"];
+        if (string.IsNullOrWhiteSpace(dataProtectionKeysPath) && builder.Environment.IsProduction())
+            dataProtectionKeysPath = "/app/keys";
+
+        var dataProtectionBuilder = builder.Services
+            .AddDataProtection()
+            .SetApplicationName("RememberAll");
+
+        if (!string.IsNullOrWhiteSpace(dataProtectionKeysPath))
+        {
+            Directory.CreateDirectory(dataProtectionKeysPath);
+            dataProtectionBuilder.PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath));
+        }
 
         // Add services to the container.
         builder.Services.AddScoped<IUserRepository, UserRepository>();

@@ -10,8 +10,10 @@ services:
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: Production
       DATABASE_PATH: /app/data
+      DataProtection__KeysPath: /app/keys
     volumes:
       - rememberall-data:/app/data
+      - rememberall-dpkeys:/app/keys
     networks:
       - rememberall-network
     restart: unless-stopped
@@ -49,3 +51,9 @@ volumes:
       type: none
       o: bind
       device: ./data
+  rememberall-dpkeys:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./keys

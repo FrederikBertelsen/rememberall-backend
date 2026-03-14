@@ -25,8 +25,8 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 COPY --from=publish /app/publish .
 
-# Create directory for SQLite database
-RUN mkdir -p /app/data
+# Create directories for SQLite database and Data Protection key ring
+RUN mkdir -p /app/data /app/keys
 
 # Set environment variables
 ENV ASPNETCORE_URLS=http://+:5000
